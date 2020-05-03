@@ -65,9 +65,10 @@ static const char *k7zCopyrightString = "7-Zip"
 
 extern int MY_CDECL main3 // change to proper name (7zip main)
 (
-#ifndef _WIN32
-    int numArguments,const char*arguments[]
-#endif
+    //#ifndef _WIN32
+    //int numArguments,const char*arguments[]
+    //#endif
+    UStringVector commandStrings
 );
 extern bool g_CaseSensitive;
 
@@ -1608,13 +1609,13 @@ int t7z_main
             _stprintf(buffer,text("torrent7z_%d%02d%02d%02d%02d%02d.log"),st.wYear,st.wMonth,st.wDay,st.wHour,st.wMinute,st.wSecond); //log filename is made using current date, time etc
         }
         t7z_exe=text("t7z");
-#ifndef _WIN32
+        #ifndef _WIN32
         e7z_exe=text("7z"); //might be external 7z
         if(nolog)
         {
             logFileName=combine_path(cpath,CSysString(buffer));
         }
-#else
+        #else
         if(nolog)
         {
             if(!((!g_noninteractive)&&g_IsParentGui))
@@ -2031,9 +2032,10 @@ int t7z_main
                         sd[0]=L"-mx=1";   //comprexxion level 1.. I think
                         pd[0]=L"-ms=off"; //solid off
                         int eax=main3(
-#ifndef _WIN32
-                        argc,newargs
-#endif
+                        //#ifndef _WIN32
+                        //argc,newargs
+                        //#endif
+                        t7z_commandStrings
                         );
                         if(!g_keepnonsolid)
                         {
@@ -2080,9 +2082,10 @@ int t7z_main
         }//The main3 function actually calls the 7zip UI console main program (t7z-master\src\cpp\7zip\UI\Console\MainAr.cpp)
 
         int eax=main3(
-#ifndef _WIN32
-        argc,newargs
-#endif
+        //#ifndef _WIN32
+        //argc,newargs
+        //#endif
+        t7z_commandStrings
         );
         if(eax==0)
         {
@@ -2228,9 +2231,10 @@ int t7z_main
                 g_isDeleteOp=1;
             }
             int eax=main3(
-#ifndef _WIN32
-            argc,newargs
-#endif
+             //#ifndef _WIN32
+            //argc,newargs
+            //#endif
+            t7z_commandStrings
             );
             g_isDeleteOp=0;
             if(!g_keepnonsolid)
@@ -2252,9 +2256,10 @@ int t7z_main
             t7z_commandStrings.Add(commandStrings[i]);
         }
         int eax=main3(
-#ifndef _WIN32
-        argc,newargs
-#endif
+         //#ifndef _WIN32
+        //argc,newargs
+        //#endif
+        t7z_commandStrings
         );
         return eax;
     }
