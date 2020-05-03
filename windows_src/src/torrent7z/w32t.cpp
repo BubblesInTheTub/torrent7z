@@ -76,7 +76,8 @@ PROCESSENTRY32*GetCurrentProcessInfo()
 }
 
 /*  #########################################################################  */
-
+// deprecating this function
+/*
 int IsParentGui()
 {
     int EAX=0;
@@ -116,7 +117,7 @@ int IsParentGui()
     }
     return EAX;
 }
-
+*/
 /*  #########################################################################  */
 
 }

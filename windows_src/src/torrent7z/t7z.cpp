@@ -70,6 +70,8 @@ extern int MY_CDECL main3 // change to proper name (7zip main)
     //#endif
     UStringVector commandStrings
 );
+//variable is internal to 7zip atually
+//Note: DON"T USE FOR RECURSION
 extern bool g_CaseSensitive;
 
 /*  #########################################################################  */
@@ -121,12 +123,15 @@ bool g_keepnonsolid;
 bool g_yplus;
 bool g_nplus;
 bool g_nocopyright;
-CSysString addcmds(text(""));
+//Shifting to local space
+//CSysString addcmds(text(""));
 
 UINT codePage;
 CSysString logFileName;
 CSysString t7z_exe,e7z_exe;
-char*buffer;
+
+//BITT: removed this global variable. It's passed through funtion arguments instead
+//char*buffer;
 
 #ifdef _WIN32
 const TCHAR dirDelimiter0='\\';
@@ -698,12 +703,13 @@ int file_exists(const CSysString&fname,CSysString&fdn)
 
 /*  #########################################################################  */
 
-int is_t7z(const CSysString&fname)
+int is_t7z(const CSysString&fname, char *buffer)
 {
     //0 - not a 7z archive
     //1 - t7z archive
     //2 - 7z archive
     int ist7z=0;
+
     if(file_exists(fname)==1)
     {
         NWindows::NFile::NIO::CInFile fread;
@@ -787,7 +793,7 @@ int is_t7z(const CSysString&fname)
 
 /*  #########################################################################  */
 
-bool addt7zsig(const CSysString&fname)
+bool addt7zsig(const CSysString&fname, char * buffer)
 {
     if(cmpro_wa_1)
     {
@@ -1069,13 +1075,14 @@ bool MyRemoveDirectory(const CSysString&src)
 
 /*  #########################################################################  */
 
-bool recompress(const CSysString&fname,bool is7z,bool nonsolid=0)
+bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,bool is7z,bool nonsolid=0)
 {
     bool eax=0;
     NWindows::NFile::NDirectory::CTempDirectory tmpdir;
     if(tmpdir.Create(text("t7z_")))
     {
-        TCHAR*buffer=(TCHAR*)torrent7z::buffer;
+        //TCHAR*buffer=(TCHAR*)torrent7z::buffer;
+        TCHAR*buffer=(TCHAR*)buffer_inp;
 		CSysString*app;
         bool ext=e7z_exe.Compare(text(""))==0?0:1;
 
@@ -1210,9 +1217,9 @@ bool recompress(const CSysString&fname,bool is7z,bool nonsolid=0)
 
 /*  #########################################################################  */
 
-bool convert2nonsolid(const CSysString&fname)
+bool convert2nonsolid(const CSysString&fname, CSysString addcmds, char* buffer)
 {
-    return recompress(fname,1,1);
+    return recompress(fname,addcmds, buffer,1,1);
 }
 
 /*  #########################################################################  */
@@ -1315,10 +1322,10 @@ int GetDictionarySize(finfo&fi,bool&solid)
 
 /*  #########################################################################  */
 
-int convert27z(const CSysString&fname,cfinfo*fi)
+int convert27z(const CSysString&fname, CSysString addcmds,cfinfo*fi, char* buffer)
 {
     int eax=0;
-    int ist7z=is_t7z(fname);
+    int ist7z=is_t7z(fname, buffer);
     bool pr=g_forceRecompress||ist7z!=1;
     if(1)
     {
@@ -1344,7 +1351,7 @@ int convert27z(const CSysString&fname,cfinfo*fi)
     }
     if(pr)
     {
-        if(recompress(fname,ist7z!=0))
+        if(recompress(fname, addcmds,buffer, ist7z!=0))
         {
             fi->fcountp++;
         }
@@ -1402,22 +1409,9 @@ void print_copyright()
 
 /*  #########################################################################  */
 
-int t7z_main
-(
-#ifndef _WIN32
-    int numArguments,const char*arguments[]
-#endif
-)
+int t7z_main(UStringVector commandStrings, char *buffer)
 {
-    UStringVector commandStrings;
-#ifdef _WIN32
-    UString cmdl(GetCommandLineW());
-    NCommandLineParser::SplitCommandLine(cmdl,commandStrings);
-#else
-//    GetArguments(numArguments,arguments,commandStrings);
-    extern void mySplitCommandLine(int numArguments,const char *arguments[],UStringVector &parts);
-    mySplitCommandLine(numArguments,arguments,commandStrings);
-#endif
+    CSysString addcmds(text(""));
     for(int i=1;i<commandStrings.Size();i++)  //size seems to be like leng (argv[]) ie. t7z.exe -switch file = size 3
     {
         if(commandStrings[i].CompareNoCase(L"-ba")==0) // disables copyright info
@@ -1813,7 +1807,7 @@ int t7z_main
         fi.fcountt=pi.fcount;
         for(int i=0;i<filelist.Size();i++)
         {
-            convert27z(filelist[i],&fi);
+            convert27z(filelist[i], addcmds ,&fi , buffer);
         }
         if(fi.fcount==0)
         {
@@ -1924,7 +1918,7 @@ int t7z_main
                             {
                                 archive[0]=a2u(clean_path(combine_path(u2a(ExtractDirPrefixFromPath(commandStrings[i])),fn)));
                             }
-                            if(((fe&2)!=0)||(is_t7z(u2a(archive[0]))==0)) // if not dir or not a t7z (guess this is where they add the archive name if not specified)
+                            if(((fe&2)!=0)||(is_t7z(u2a(archive[0]), buffer)==0)) // if not dir or not a t7z (guess this is where they add the archive name if not specified)
                             {
                                 archive[0]+=L".7z";
                                 t7z_commandStrings.Add(commandStrings[i]);
@@ -1999,7 +1993,7 @@ int t7z_main
                 if(cmpro_wa)
                 {
                     CSysString fname=u2a(archive[0]);
-                    int ist7z=is_t7z(fname);
+                    int ist7z=is_t7z(fname , buffer);
                     if(ist7z==1)
                     {
                         if(cmpro_wa_0)
@@ -2011,7 +2005,7 @@ int t7z_main
                         }
                         if(cmpro_wa_1)
                         {
-                            if(convert2nonsolid(fname))
+                            if(convert2nonsolid(fname, addcmds,buffer))
                             {
                                 ist7z=2;
                             }
@@ -2041,7 +2035,7 @@ int t7z_main
                         );
                         if(!g_keepnonsolid)
                         {
-                            if(!recompress(u2a(archive[0]),1))
+                            if(!recompress(u2a(archive[0]), addcmds,buffer,1))
                             {
                                 eax=NExitCode::kFatalError;
                             }
@@ -2092,7 +2086,7 @@ int t7z_main
         if(eax==0)
         {
             eax=NExitCode::kFatalError;
-            if(addt7zsig(u2a(archive[0])))
+            if(addt7zsig(u2a(archive[0]) , buffer ))
             {
                 bool fne=1;
                 if(replace_archive&&file_exists(u2a(rarchive)))
@@ -2193,7 +2187,7 @@ int t7z_main
             if(fe)
             {
                 CSysString fname=u2a(archive[0]);
-                int ist7z=is_t7z(fname);
+                int ist7z=is_t7z(fname, buffer);
                 if(ist7z==1)
                 {
                     if(cmpro_wa_0)
@@ -2205,7 +2199,7 @@ int t7z_main
                     }
                     if(cmpro_wa_1)
                     {
-                        if(convert2nonsolid(fname))
+                        if(convert2nonsolid(fname, addcmds,buffer))
                         {
                             ist7z=2;
                         }
@@ -2241,7 +2235,7 @@ int t7z_main
             g_isDeleteOp=0;
             if(!g_keepnonsolid)
             {
-                if(!recompress(u2a(archive[0]),1))
+                if(!recompress(u2a(archive[0]),addcmds,buffer,1))
                 {
                     eax=NExitCode::kFatalError;
                 }
@@ -2299,6 +2293,7 @@ int MY_CDECL main
 #endif
 )
 {
+    char*buffer;
 #ifdef _UNICODE
 #ifndef _WIN64
     if(!IsItWindowsNT())
@@ -2337,7 +2332,8 @@ int MY_CDECL main
         logprint(text("error: Can't allocate required memory!\n"));
         return NExitCode::kFatalError;
     }
-    g_IsParentGui=IsParentGui()!=0;
+    //g_IsParentGui=IsParentGui()!=0;
+    g_IsParentGui = false;
     g_firstInstance=0;
     g_defaultPriority=0;
     g_isDeleteOp=0;
@@ -2347,11 +2343,16 @@ int MY_CDECL main
     g_nocopyright=0;
     //logprint(text("executing command line: ")+CSysString(GetCommandLine())+text("\n"),~1);
     //log execution started:
-    int EAX=t7z_main(
-#ifndef _WIN32
-    numArguments,arguments
-#endif
-    );
+    UStringVector commandStrings;
+    #ifdef _WIN32
+    UString cmdl(GetCommandLineW());
+    NCommandLineParser::SplitCommandLine(cmdl,commandStrings);
+    #else
+    //    GetArguments(numArguments,arguments,commandStrings);
+    extern void mySplitCommandLine(int numArguments,const char *arguments[],UStringVector &parts);
+    mySplitCommandLine(numArguments,arguments,commandStrings);
+    #endif
+    int EAX=t7z_main(commandStrings , buffer );
     //log time taken
     log(text(""),1);
 #ifdef _WIN32
