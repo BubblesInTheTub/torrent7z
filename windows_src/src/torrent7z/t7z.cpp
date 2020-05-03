@@ -111,21 +111,28 @@ typedef int (*file_proc)(const NWindows::NFile::NFind::CFileInfo&fileInfo,const 
 
 const int crcsz=128;
 
-bool g_stripFileNames;
-bool g_singleFile;
-bool g_forceRecompress;
-bool g_noninteractive;
-bool g_IsParentGui;
-bool g_firstInstance;
-bool g_defaultPriority;
-bool g_isDeleteOp;
-bool g_keepnonsolid;
-bool g_yplus;
-bool g_nplus;
-bool g_nocopyright;
+//Can't get rid of these globals yet. For the time being, converting them to arrays to allow recursion
+// sort fo like a stack
+#define MAX_RECURSIONS 5
+unsigned short recursion_id = 0;
+bool g_stripFileNames[MAX_RECURSIONS];
+bool g_singleFile[MAX_RECURSIONS];
+bool g_forceRecompress[MAX_RECURSIONS];
+bool g_noninteractive[MAX_RECURSIONS];
+bool g_IsParentGui[MAX_RECURSIONS];
+bool g_firstInstance[MAX_RECURSIONS];
+bool g_defaultPriority[MAX_RECURSIONS];
+bool g_isDeleteOp[MAX_RECURSIONS];
+bool g_keepnonsolid[MAX_RECURSIONS];
+bool g_yplus[MAX_RECURSIONS];
+bool g_nplus[MAX_RECURSIONS];
+bool g_nocopyright[MAX_RECURSIONS];
+bool g_createnonsolid[MAX_RECURSIONS];
+bool g_createnonsolid_r[MAX_RECURSIONS];
 //Shifting to local space
 //CSysString addcmds(text(""));
 
+//retaining these as global, don't foresee internal recursions setting them
 UINT codePage;
 CSysString logFileName;
 CSysString t7z_exe,e7z_exe;
@@ -145,8 +152,6 @@ const bool cmpro_wa_0=false;
 const bool cmpro_wa_1=true && (!cmpro_wa_0);
 const bool cmpro_wa=cmpro_wa_0||cmpro_wa_1;
 
-bool g_createnonsolid=false;
-bool g_createnonsolid_r=false;
 
 struct
 {
@@ -190,14 +195,34 @@ UString a2u(const AString&a)
 
 bool stripFileNames()
 {
-    return g_stripFileNames;
+    return g_stripFileNames[recursion_id];
 }
 
 /*  #########################################################################  */
 
 bool isDeleteOp()
 {
-    return g_isDeleteOp;
+    return g_isDeleteOp[recursion_id];
+}
+
+//just used to store some default values into all versions of the switches
+void initialize_global_switches(){
+    for (unsigned short i =0; i < MAX_RECURSIONS; i++){
+        g_createnonsolid[i]=false;
+        g_createnonsolid_r[i]=false; 
+        g_singleFile[i]=false;
+        g_stripFileNames[i]=false; 
+        g_IsParentGui[i] = false;
+        g_forceRecompress[i]=false;
+        g_noninteractive[i]=false;
+        g_firstInstance[i]=false;
+        g_defaultPriority[i]=false;    
+        g_isDeleteOp[i]=false;
+        g_keepnonsolid[i]=false;    
+        g_yplus[i]=false;
+        g_nplus[i]=false;    
+        g_nocopyright[i]=false;
+    }
 }
 
 /*  #########################################################################  */
@@ -211,8 +236,8 @@ const char*get_t7zsig()
 #else
     _t7zsig[16]=0;
 #endif
-    _t7zsig[16]|=g_singleFile?2:0;
-    _t7zsig[16]|=g_stripFileNames?4:0;
+    _t7zsig[16]|=g_singleFile[recursion_id]?2:0;
+    _t7zsig[16]|=g_stripFileNames[recursion_id]?4:0;
     return _t7zsig;
 }
 
@@ -236,7 +261,7 @@ bool compare_t7zsig(const char*fdata)
     }
     if(_t7zsig[16]&2)
     {
-        bool a=g_stripFileNames;
+        bool a=g_stripFileNames[recursion_id];
         bool b=(_t7zsig[16]&4)!=0;
         if(a!=b)
         {
@@ -797,7 +822,7 @@ bool addt7zsig(const CSysString&fname, char * buffer)
 {
     if(cmpro_wa_1)
     {
-        if(g_createnonsolid)
+        if(g_createnonsolid[recursion_id])
         {
             return true;
         }
@@ -932,13 +957,13 @@ int cp(const CSysString&app,const CSysString&cmd)
     {
         if(cmpro_wa_1)
         {
-            if(g_createnonsolid_r)
+            if(g_createnonsolid_r[recursion_id])
             {
                 DWORD bp=-1,td;
                 DWORD ba=((DWORD)GetModuleHandle(0))&0xFFFFF000;
                 VirtualProtectEx(pi.hProcess,(void*)ba,16,PAGE_READWRITE,&td);
                 WriteProcessMemory(pi.hProcess,(void*)(ba+3),(void*)&bp,1,0);
-                g_createnonsolid_r=0;
+                g_createnonsolid_r[recursion_id]=0;
             }
         }
         ResumeThread(pi.hThread);
@@ -1171,12 +1196,12 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
             if(proceed)
             {
 				//call t7z.exe itself again, with replace-archive and archive name
-                _stprintf(buffer,text("\"%s\" a --default-priority --log\"%s\" --replace-archive -y %s-- \"%s\" \"%s%c*\""),_zt(t7z_exe),_zt(logFileName),_zt(addcmds+(g_stripFileNames?text("--strip-filenames "):text(""))),_zt(newfn),_zt(tmpdir.GetPath()),dirDelimiter0);
+                _stprintf(buffer,text("\"%s\" a --default-priority --log\"%s\" --replace-archive -y %s-- \"%s\" \"%s%c*\""),_zt(t7z_exe),_zt(logFileName),_zt(addcmds+(g_stripFileNames[recursion_id]?text("--strip-filenames "):text(""))),_zt(newfn),_zt(tmpdir.GetPath()),dirDelimiter0);
                 if(cmpro_wa_1)
                 {
                     if(nonsolid)
                     {
-                        g_createnonsolid_r=1;
+                        g_createnonsolid_r[recursion_id]=1;
                     }
                 }
                 if(execute(t7z_exe,buffer))
@@ -1326,7 +1351,7 @@ int convert27z(const CSysString&fname, CSysString addcmds,cfinfo*fi, char* buffe
 {
     int eax=0;
     int ist7z=is_t7z(fname, buffer);
-    bool pr=g_forceRecompress||ist7z!=1;
+    bool pr=g_forceRecompress[recursion_id]||ist7z!=1;
     if(1)
     {
         const UInt32 tl=10*1000;
@@ -1385,24 +1410,24 @@ void print_copyright()
     if(blk.Compare(CSysString(_tgetenv(_zt(MultiByteToUnicodeString(t7zsig_str,CP_ACP)))))==0)
     {
         setenv(_zt(MultiByteToUnicodeString(t7zsig_str,CP_ACP)),text("1"),1);
-        if(!g_nocopyright)
+        if(!g_nocopyright[recursion_id])
         {
             logprint(text("\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
             logprint(text("using ")+MultiByteToUnicodeString(k7zCopyrightString,CP_ACP)+text("\n\n"),~2);
         }
-        g_firstInstance=1;
+        g_firstInstance[recursion_id]=1;
     }
 #else
     CSysString blk(text(""));
     if(blk.Compare(CSysString(_tgetenv(t7zsig_str)))==0)
     {
         setenv(t7zsig_str,text("1"),1);
-        if(!g_nocopyright)
+        if(!g_nocopyright[recursion_id])
         {
             logprint(text("\n")+CSysString(t7zsig_str)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
             logprint(text("using ")+CSysString(k7zCopyrightString)+text("\n\n"),~2);
         }
-        g_firstInstance=1;
+        g_firstInstance[recursion_id]=1;
     }
 #endif
 }
@@ -1416,7 +1441,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
     {
         if(commandStrings[i].CompareNoCase(L"-ba")==0) // disables copyright info
         {
-            g_nocopyright=1;
+            g_nocopyright[recursion_id]=1;
             commandStrings.Delete(i);
             i--;
         }
@@ -1479,30 +1504,30 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 }
                 if(commandStrings[i].CompareNoCase(L"--force-recompress")==0||commandStrings[i].CompareNoCase(L"-fr")==0)
                 {
-                    g_forceRecompress=1;
+                    g_forceRecompress[recursion_id]=1;
                     noprint=1;
                 }
                 if(commandStrings[i].CompareNoCase(L"--batch")==0||commandStrings[i].CompareNoCase(L"-b")==0)
                 {
-                    g_noninteractive=1;
+                    g_noninteractive[recursion_id]=1;
                     noprint=1;
                 }
                 if(commandStrings[i].CompareNoCase(L"--default-priority")==0||commandStrings[i].CompareNoCase(L"-dp")==0)
                 {
-                    g_defaultPriority=1;
+                    g_defaultPriority[recursion_id]=1;
                     noprint=1;
                 }
                 if(commandStrings[i].CompareNoCase(L"--strip-filenames")==0||commandStrings[i].CompareNoCase(L"-sf")==0)
                 {
-                    g_stripFileNames=1;
+                    g_stripFileNames[recursion_id]=1;
                     noprint=1;
                 }
                 if(cmpro_wa)
                 {
                     if(commandStrings[i].CompareNoCase(L"--cmpro")==0||commandStrings[i].CompareNoCase(L"-cm")==0)
                     {
-                        g_keepnonsolid=1;
-                        g_noninteractive=1;
+                        g_keepnonsolid[recursion_id]=1;
+                        g_noninteractive[recursion_id]=1;
                         noprint=1;
                     }
                 }
@@ -1533,12 +1558,12 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 }
                 if(commandStrings[i].CompareNoCase(L"-y")==0)
                 {
-                    g_yplus=1;
+                    g_yplus[recursion_id]=1;
                     noprint=1;
                 }
                 if(commandStrings[i].CompareNoCase(L"-n")==0)
                 {
-                    g_nplus=1;
+                    g_nplus[recursion_id]=1;
                     noprint=1;
                 }
                 if(commandStrings[i].CompareNoCase(L"-bd")==0)
@@ -1560,20 +1585,20 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         }
     }
 #ifdef _WIN32 // Set the process priority (not really needed imo) (based on a the -dp --defaultpriority switch)
-    if(!g_defaultPriority)
-    {
-        SetPriorityClass(GetCurrentProcess(),IDLE_PRIORITY_CLASS);
-    }
+    //if(!g_defaultPriority[recursion_id])
+    //{
+    //    SetPriorityClass(GetCurrentProcess(),IDLE_PRIORITY_CLASS);
+    //}
 #endif
-    if(g_yplus!=0&&g_nplus!=0) // is always-yes/no enabled
+    if(g_yplus[recursion_id]!=0&&g_nplus[recursion_id]!=0) // is always-yes/no enabled
     {
-        g_yplus=0;
+        g_yplus[recursion_id]=0;
     }
-    if(g_noninteractive)
+    if(g_noninteractive[recursion_id])
     {
-        if(g_yplus==0&&g_nplus==0)
+        if(g_yplus[recursion_id]==0&&g_nplus[recursion_id]==0)
         {
-            g_nplus=1;
+            g_nplus[recursion_id]=1;
         }
     }
     NWindows::NFile::NDirectory::CTempDirectory tmpdir; //temp dir for intermediate shit
@@ -1584,7 +1609,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
     {
         CSysString cpath;
         NWindows::NFile::NDirectory::MyGetCurrentDirectory(cpath); // current directory
-        if(g_firstInstance) //not sure why it would want to check this. Would this function be called multiple times?
+        if(g_firstInstance[recursion_id]) //not sure why it would want to check this. Would this function be called multiple times?
         {
             setenv(text("tmp"),cpath,1);
             if(tmpdir.Create(text("t7z_")))
@@ -1614,7 +1639,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         #else
         if(nolog)
         {
-            if(!((!g_noninteractive)&&g_IsParentGui))
+            if(!((!g_noninteractive[recursion_id])&&g_IsParentGui[recursion_id]))
             {
                 logFileName=combine_path(cpath,CSysString(buffer));
             }
@@ -1634,7 +1659,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         }
         if(nolog)
         {
-            if((!g_noninteractive)&&g_IsParentGui)
+            if((!g_noninteractive[recursion_id])&&g_IsParentGui[recursion_id])
             {
                 cpath=clean_path(u2a(ExtractDirPrefixFromPath(a2u(cpath)))); //gets the current directory (dir path sans exe filename)
                 logFileName=combine_path(cpath,CSysString(buffer));
@@ -1737,11 +1762,11 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                         {
                             if(knownext[k].a==0)
                             {
-                                if(g_yplus)
+                                if(g_yplus[recursion_id])
                                 {
                                     knownext[k].a=1;
                                 }
-                                if(g_nplus)
+                                if(g_nplus[recursion_id])
                                 {
                                     knownext[k].a=2;
                                 }
@@ -1784,7 +1809,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                                         }
                                         if(lstrcmpi(reply,text("q"))==0||lstrcmpi(reply,text("quit"))==0)
                                         {
-                                            g_noninteractive=1;
+                                            g_noninteractive[recursion_id]=1;
                                             return 0;
                                         }
                                     }
@@ -2033,7 +2058,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                         //#endif
                         t7z_commandStrings
                         );
-                        if(!g_keepnonsolid)
+                        if(!g_keepnonsolid[recursion_id])
                         {
                             if(!recompress(u2a(archive[0]), addcmds,buffer,1))
                             {
@@ -2060,15 +2085,15 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         }
         if(fi.tcount==1) // is there only one file
         {
-            g_singleFile=1;
+            g_singleFile[recursion_id]=1;
         }
-        if(!g_singleFile) // disable strip filenames if multiple filenames
+        if(!g_singleFile[recursion_id]) // disable strip filenames if multiple filenames
         {
-            g_stripFileNames=0;
+            g_stripFileNames[recursion_id]=0;
         }
         if(cmpro_wa_1)
         {
-            if(g_createnonsolid)
+            if(g_createnonsolid[recursion_id])
             {
                 t7z_commandStrings.Delete(6,7);
                 t7z_commandStrings.Delete(4,1);
@@ -2095,7 +2120,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 }
                 if(fne)
                 {
-                    if(g_stripFileNames&&g_singleFile)
+                    if(g_stripFileNames[recursion_id]&&g_singleFile[recursion_id])
                     {
                         //or else file extension most likely will be lost
                         rarchive=a2u(clean_path(combine_path(u2a(ExtractDirPrefixFromPath(rarchive)),fi.fileInfo.Name)+CSysString(text(".7z"))));
@@ -2224,7 +2249,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
             }
             if(cmpro_wa_0)
             {
-                g_isDeleteOp=1;
+                g_isDeleteOp[recursion_id]=1;
             }
             int eax=main3(
              //#ifndef _WIN32
@@ -2232,8 +2257,8 @@ int t7z_main(UStringVector commandStrings, char *buffer)
             //#endif
             t7z_commandStrings
             );
-            g_isDeleteOp=0;
-            if(!g_keepnonsolid)
+            g_isDeleteOp[recursion_id]=0;
+            if(!g_keepnonsolid[recursion_id])
             {
                 if(!recompress(u2a(archive[0]),addcmds,buffer,1))
                 {
@@ -2294,6 +2319,7 @@ int MY_CDECL main
 )
 {
     char*buffer;
+    initialize_global_switches();
 #ifdef _UNICODE
 #ifndef _WIN64
     if(!IsItWindowsNT())
@@ -2310,19 +2336,19 @@ int MY_CDECL main
         SetErrorMode(SEM_FAILCRITICALERRORS);
     }
     SetLastError(0);
-    g_createnonsolid=(((BYTE*)((((DWORD)GetModuleHandle(0))&0xFFFFF000)+3))[0]&0xff)==0xff;
+    //g_createnonsolid=(((BYTE*)((((DWORD)GetModuleHandle(0))&0xFFFFF000)+3))[0]&0xff)==0xff;
 #endif
-    g_stripFileNames=0;
-    g_singleFile=0;
-    g_forceRecompress=0;
-    g_noninteractive=(_isatty(_fileno(stdout))==0||_isatty(_fileno(stderr))==0);
+    //g_stripFileNames=0;
+    //g_singleFile=0;
+    //g_forceRecompress=0;
+    //g_noninteractive=(_isatty(_fileno(stdout))==0||_isatty(_fileno(stderr))==0);
 #ifdef _WIN32
-    STARTUPINFO startupInfo;
-    GetStartupInfo(&startupInfo);
-    if((startupInfo.dwFlags&STARTF_USESHOWWINDOW)&&(startupInfo.wShowWindow==0))
-    {
-        g_noninteractive=1;
-    }
+    //STARTUPINFO startupInfo;
+    //GetStartupInfo(&startupInfo);
+    //if((startupInfo.dwFlags&STARTF_USESHOWWINDOW)&&(startupInfo.wShowWindow==0))
+    //{
+    //    g_noninteractive=1;
+    //}
 #endif
     codePage=CP_UTF8;
     logFileName=text("");
@@ -2333,14 +2359,15 @@ int MY_CDECL main
         return NExitCode::kFatalError;
     }
     //g_IsParentGui=IsParentGui()!=0;
-    g_IsParentGui = false;
-    g_firstInstance=0;
-    g_defaultPriority=0;
-    g_isDeleteOp=0;
-    g_keepnonsolid=0;
-    g_yplus=0;
-    g_nplus=0;
-    g_nocopyright=0;
+    
+    ///g_IsParentGui = false;
+    ///g_firstInstance=0;
+    ///g_defaultPriority=0;
+    ///g_isDeleteOp=0;
+    ///g_keepnonsolid=0;
+    ///g_yplus=0;
+    ///g_nplus=0;
+    ///g_nocopyright=0;
     //logprint(text("executing command line: ")+CSysString(GetCommandLine())+text("\n"),~1);
     //log execution started:
     UStringVector commandStrings;
@@ -2356,7 +2383,7 @@ int MY_CDECL main
     //log time taken
     log(text(""),1);
 #ifdef _WIN32
-    if((!g_noninteractive)&&g_IsParentGui)
+    if((!g_noninteractive[0])&&g_IsParentGui[0])
     {
         logprint(text("\nPress any key to continue . . . "),~2);
         _gettch();
