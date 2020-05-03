@@ -182,16 +182,17 @@ const char *kUnsupportedArcTypeMessage = "Unsupported archive type";
 namespace torrent7z{extern void SetCommandStrings(UStringVector&cs);}
 
 int Main2(
-  #ifndef _WIN32
-  int numArguments, const char *arguments[]
-  #endif
+  //#ifndef _WIN32
+  //int numArguments, const char *arguments[]
+  //#endif
+  UStringVector commandStrings
 )
 {
   #ifdef _WIN32
   SetFileApisToOEM();
   #endif
 
-  UStringVector commandStrings;
+  //UStringVector commandStrings;
 /*
   #ifdef _WIN32
   NCommandLineParser::SplitCommandLine(GetCommandLineW(), commandStrings);
@@ -199,7 +200,7 @@ int Main2(
   GetArguments(numArguments, arguments, commandStrings);
   #endif
 */
-  torrent7z::SetCommandStrings(commandStrings);
+  //torrent7z::SetCommandStrings(commandStrings);
 
   if(commandStrings.Size() == 1)
   {

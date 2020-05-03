@@ -36,9 +36,10 @@ static inline bool IsItWindowsNT()
 #endif
 
 extern int Main2(
-  #ifndef _WIN32
-  int numArguments, const char *arguments[]
-  #endif
+  //#ifndef _WIN32
+  //int numArguments, const char *arguments[]
+  //#endif
+  UStringVector commandStrings
 );
 
 static const char *kExceptionErrorMessage = "\n\nError:\n";
@@ -50,9 +51,10 @@ static const char *kInternalExceptionMessage = "\n\nInternal Error #";
 
 int MY_CDECL main3
 (
-#ifndef _WIN32
-int numArguments, const char *arguments[]
-#endif
+//#ifndef _WIN32
+//int numArguments, const char *arguments[]
+//#endif
+UStringVector commandStrings
 )
 {
   g_StdStream = &g_StdOut;
@@ -78,9 +80,10 @@ int numArguments, const char *arguments[]
   try
   {
     res = Main2(
-#ifndef _WIN32
-      numArguments, arguments
-#endif
+    //#ifndef _WIN32
+    //  numArguments, arguments
+    //#endif
+    commandStrings
     );
   }
   catch(const CNewException &)
