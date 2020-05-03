@@ -1245,6 +1245,8 @@ static void GetArguments(int numArguments,const char*arguments[],UStringVector&p
 
 /*  #########################################################################  */
 
+//funtion deprecated
+/*
 void SetCommandStrings(UStringVector&cs) // Seems to store the command string in a static member initially. subsequent calls have the input command string being overwitten with this
 {
     static UStringVector*pcs=0;
@@ -1269,7 +1271,7 @@ void SetCommandStrings(UStringVector&cs) // Seems to store the command string in
         }
     }
 }
-
+*/
 /*  #########################################################################  */
 
 int GetDictionarySize(finfo&fi,bool&solid)
@@ -1582,7 +1584,7 @@ int t7z_main
     }
     NWindows::NFile::NDirectory::CTempDirectory tmpdir; //temp dir for intermediate shit
     UStringVector t7z_commandStrings;
-    SetCommandStrings(t7z_commandStrings);
+    //SetCommandStrings(t7z_commandStrings);
 	CSysString tmp2 = commandStrings[0];
     t7z_commandStrings.Add(tmp2);//// <= T7 command strings start here
     {
