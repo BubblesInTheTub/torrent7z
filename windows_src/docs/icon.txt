@@ -1,0 +1,2 @@
+application icon taken from http://www.everaldo.com/crystal/?action=preview
+it's released under lgpl license

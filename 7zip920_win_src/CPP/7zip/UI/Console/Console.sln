@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Console", "Console.vcxproj", "{48CDCF88-278A-1689-F450-A8428004B1D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DebugU|Win32 = DebugU|Win32
+		Release|Win32 = Release|Win32
+		ReleaseU|Win32 = ReleaseU|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.Debug|Win32.Build.0 = Debug|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.DebugU|Win32.ActiveCfg = DebugU|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.DebugU|Win32.Build.0 = DebugU|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.Release|Win32.ActiveCfg = Release|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.Release|Win32.Build.0 = Release|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.ReleaseU|Win32.ActiveCfg = ReleaseU|Win32
+		{48CDCF88-278A-1689-F450-A8428004B1D5}.ReleaseU|Win32.Build.0 = ReleaseU|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

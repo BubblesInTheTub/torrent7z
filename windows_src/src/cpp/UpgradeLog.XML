@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Build">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\cpp\Build.sln">
+</Property><Property Name="Date" Value="Thursday, April 23, 2020">
+</Property><Property Name="Time" Value="23:15:24 PM">
+</Property></Properties><Event ErrorLevel="0" Project="Build" Source="Build.mak" Description="Converting project file 'C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\cpp\Build.mak'.">
+</Event><Event ErrorLevel="2" Project="C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\cpp\Build.mak" Source="" Description="The following error has occurred during XML parsing:&#xA;&#xA;File: C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\cpp\Build.mak&#xA;Line: 1&#xA;Column: 1&#xA;Error Message:&#xA;Incorrect document syntax.&#xA;&#xA;The file 'C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\cpp\Build.mak' has failed to load.">
+</Event><Event ErrorLevel="2" Project="Build" Source="Build.mak" Description="End tag 'xs:choice' does not match the start tag 'xs:sequence'.&#xA;">
+</Event><Event ErrorLevel="2" Project="Build" Source="Build.mak" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="3" Project="Build" Source="Build.mak" Description="Not Converted">
+</Event><Event ErrorLevel="2" Project="" Source="Build.mak" Description="Project upgrade failed.">
+</Event></UpgradeLog>

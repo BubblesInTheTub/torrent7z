@@ -1,0 +1,16 @@
+﻿Build started 4/27/2020 12:14:21 AM.
+     1>Project "C:\Documents and Settings\Amith\My Documents\Downloads\7zip920_win_src\CPP\7zip\UI\Console\Console.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating ".\Debug\Console.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         Microsoft (R) Macro Assembler Version 10.00.30319.01
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         Performing Custom Build Tools
+          Assembling: C:\Documents
+     1>MASM : fatal error A1000: cannot open file : C:\Documents
+     1>Done Building Project "C:\Documents and Settings\Amith\My Documents\Downloads\7zip920_win_src\CPP\7zip\UI\Console\Console.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.21

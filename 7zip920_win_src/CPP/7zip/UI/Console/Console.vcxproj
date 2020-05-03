@@ -1,0 +1,457 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugU|Win32">
+      <Configuration>DebugU</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseU|Win32">
+      <Configuration>ReleaseU</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>.\Debug\</OutDir>
+    <IntDir>.\Debug\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+    <OutDir>.\ReleaseU\</OutDir>
+    <IntDir>.\ReleaseU\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+    <OutDir>.\DebugU\</OutDir>
+    <IntDir>.\DebugU\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;WIN_LONG_PATH;EXTERNAL_CODECS;_7ZIP_LARGE_PAGES;SUPPORT_DEVICE_FILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Debug\Console.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Debug\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\Debug\Console.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug\Console.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\UTIL\7z.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MinSpace</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;UNICODE;WIN32;_CONSOLE;WIN_LONG_PATH;EXTERNAL_CODECS;_7ZIP_LARGE_PAGES;SUPPORT_DEVICE_FILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\ReleaseU\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\ReleaseU\Console.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\ReleaseU\</ObjectFileName>
+      <ProgramDataBaseFileName>.\ReleaseU\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\ReleaseU\Console.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\ReleaseU\Console.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\UTIL\7zn.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <Optimization>MinSpace</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;WIN_LONG_PATH;EXTERNAL_CODECS;_7ZIP_LARGE_PAGES;SUPPORT_DEVICE_FILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
+      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\Release\Console.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\Release\</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\Release\Console.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release\Console.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\UTIL\7z.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <Optimization>Disabled</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;UNICODE;WIN32;_CONSOLE;WIN_LONG_PATH;EXTERNAL_CODECS;_7ZIP_LARGE_PAGES;SUPPORT_DEVICE_FILE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>.\DebugU\</AssemblerListingLocation>
+      <PrecompiledHeaderOutputFile>.\DebugU\Console.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdAfx.h</PrecompiledHeaderFile>
+      <ObjectFileName>.\DebugU\</ObjectFileName>
+      <ProgramDataBaseFileName>.\DebugU\</ProgramDataBaseFileName>
+      <CallingConvention>StdCall</CallingConvention>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Midl>
+      <TypeLibraryName>.\DebugU\Console.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0419</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\DebugU\Console.bsc</OutputFile>
+    </Bscmake>
+    <Link>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>C:\UTIL\7z.exe</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">StdAfx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">StdAfx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StdAfx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">StdAfx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="BenchCon.cpp" />
+    <ClCompile Include="ConsoleClose.cpp" />
+    <ClCompile Include="ExtractCallbackConsole.cpp" />
+    <ClCompile Include="List.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainAr.cpp" />
+    <ClCompile Include="OpenCallbackConsole.cpp" />
+    <ClCompile Include="PercentPrinter.cpp" />
+    <ClCompile Include="UpdateCallbackConsole.cpp" />
+    <ClCompile Include="UserInputUtils.cpp" />
+    <ClCompile Include="..\..\..\Windows\DLL.cpp" />
+    <ClCompile Include="..\..\..\Windows\Error.cpp" />
+    <ClCompile Include="..\..\..\Windows\FileDir.cpp" />
+    <ClCompile Include="..\..\..\Windows\FileFind.cpp" />
+    <ClCompile Include="..\..\..\Windows\FileIO.cpp" />
+    <ClCompile Include="..\..\..\Windows\FileName.cpp" />
+    <ClCompile Include="..\..\..\Windows\MemoryLock.cpp" />
+    <ClCompile Include="..\..\..\Windows\PropVariant.cpp" />
+    <ClCompile Include="..\..\..\Windows\PropVariantConversions.cpp" />
+    <ClCompile Include="..\..\..\Windows\Registry.cpp" />
+    <ClCompile Include="..\..\..\Windows\System.cpp" />
+    <ClCompile Include="..\..\..\Windows\Time.cpp" />
+    <ClCompile Include="..\..\..\Common\CommandLineParser.cpp" />
+    <ClCompile Include="..\..\..\Common\CRC.cpp" />
+    <ClCompile Include="..\..\..\Common\IntToString.cpp" />
+    <ClCompile Include="..\..\..\Common\ListFileUtils.cpp" />
+    <ClCompile Include="..\..\..\Common\MyString.cpp" />
+    <ClCompile Include="..\..\..\Common\MyVector.cpp" />
+    <ClCompile Include="..\..\..\Common\NewHandler.cpp" />
+    <ClCompile Include="..\..\..\Common\StdInStream.cpp" />
+    <ClCompile Include="..\..\..\Common\StdOutStream.cpp" />
+    <ClCompile Include="..\..\..\Common\StringConvert.cpp" />
+    <ClCompile Include="..\..\..\Common\StringToInt.cpp" />
+    <ClCompile Include="..\..\..\Common\UTFConvert.cpp" />
+    <ClCompile Include="..\..\..\Common\Wildcard.cpp" />
+    <ClCompile Include="..\Common\ArchiveCommandLine.cpp" />
+    <ClCompile Include="..\Common\ArchiveExtractCallback.cpp" />
+    <ClCompile Include="..\Common\ArchiveOpenCallback.cpp" />
+    <ClCompile Include="..\Common\Bench.cpp" />
+    <ClCompile Include="..\Common\DefaultName.cpp" />
+    <ClCompile Include="..\Common\EnumDirItems.cpp" />
+    <ClCompile Include="..\Common\Extract.cpp" />
+    <ClCompile Include="..\Common\ExtractingFilePath.cpp" />
+    <ClCompile Include="..\Common\LoadCodecs.cpp" />
+    <ClCompile Include="..\Common\OpenArchive.cpp" />
+    <ClCompile Include="..\Common\PropIDUtils.cpp" />
+    <ClCompile Include="..\Common\SetProperties.cpp" />
+    <ClCompile Include="..\Common\SortUtils.cpp" />
+    <ClCompile Include="..\Common\TempFiles.cpp" />
+    <ClCompile Include="..\Common\Update.cpp" />
+    <ClCompile Include="..\Common\UpdateAction.cpp" />
+    <ClCompile Include="..\Common\UpdateCallback.cpp" />
+    <ClCompile Include="..\Common\UpdatePair.cpp" />
+    <ClCompile Include="..\Common\UpdateProduce.cpp" />
+    <ClCompile Include="..\Common\WorkDir.cpp" />
+    <ClCompile Include="..\..\Common\CreateCoder.cpp" />
+    <ClCompile Include="..\..\Common\FilePathAutoRename.cpp" />
+    <ClCompile Include="..\..\Common\FileStreams.cpp" />
+    <ClCompile Include="..\..\Common\FilterCoder.cpp" />
+    <ClCompile Include="..\..\Common\ProgressUtils.cpp" />
+    <ClCompile Include="..\..\Common\StreamUtils.cpp" />
+    <ClCompile Include="..\..\Compress\CopyCoder.cpp" />
+    <ClCompile Include="..\..\..\..\C\7zCrc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+      </PrecompiledHeader>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\C\Alloc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\C\CpuArch.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\C\Threads.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\Archive\Common\OutStreamWithCRC.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="BenchCon.h" />
+    <ClInclude Include="ConsoleClose.h" />
+    <ClInclude Include="ExtractCallbackConsole.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="OpenCallbackConsole.h" />
+    <ClInclude Include="PercentPrinter.h" />
+    <ClInclude Include="UpdateCallbackConsole.h" />
+    <ClInclude Include="UserInputUtils.h" />
+    <ClInclude Include="..\..\..\Windows\DLL.h" />
+    <ClInclude Include="..\..\..\Windows\Error.h" />
+    <ClInclude Include="..\..\..\Windows\FileDir.h" />
+    <ClInclude Include="..\..\..\Windows\FileFind.h" />
+    <ClInclude Include="..\..\..\Windows\FileIO.h" />
+    <ClInclude Include="..\..\..\Windows\FileName.h" />
+    <ClInclude Include="..\..\..\Windows\MemoryLock.h" />
+    <ClInclude Include="..\..\..\Windows\NtCheck.h" />
+    <ClInclude Include="..\..\..\Windows\PropVariant.h" />
+    <ClInclude Include="..\..\..\Windows\PropVariantConversions.h" />
+    <ClInclude Include="..\..\..\Windows\Registry.h" />
+    <ClInclude Include="..\..\..\Windows\System.h" />
+    <ClInclude Include="..\..\..\Windows\Time.h" />
+    <ClInclude Include="..\..\..\Common\Buffer.h" />
+    <ClInclude Include="..\..\..\Common\CommandLineParser.h" />
+    <ClInclude Include="..\..\..\Common\ComTry.h" />
+    <ClInclude Include="..\..\..\Common\Defs.h" />
+    <ClInclude Include="..\..\..\Common\IntToString.h" />
+    <ClInclude Include="..\..\..\Common\ListFileUtils.h" />
+    <ClInclude Include="..\..\..\Common\MyCom.h" />
+    <ClInclude Include="..\..\..\Common\MyString.h" />
+    <ClInclude Include="..\..\..\Common\MyVector.h" />
+    <ClInclude Include="..\..\..\Common\NewHandler.h" />
+    <ClInclude Include="..\..\..\Common\StdInStream.h" />
+    <ClInclude Include="..\..\..\Common\StdOutStream.h" />
+    <ClInclude Include="..\..\..\Common\StringConvert.h" />
+    <ClInclude Include="..\..\..\Common\StringToInt.h" />
+    <ClInclude Include="..\..\..\Common\UTFConvert.h" />
+    <ClInclude Include="..\..\..\Common\Wildcard.h" />
+    <ClInclude Include="..\Common\ArchiveCommandLine.h" />
+    <ClInclude Include="..\Common\ArchiveExtractCallback.h" />
+    <ClInclude Include="..\Common\ArchiveOpenCallback.h" />
+    <ClInclude Include="..\Common\Bench.h" />
+    <ClInclude Include="..\Common\DefaultName.h" />
+    <ClInclude Include="..\Common\DirItem.h" />
+    <ClInclude Include="..\Common\EnumDirItems.h" />
+    <ClInclude Include="..\Common\ExitCode.h" />
+    <ClInclude Include="..\Common\Extract.h" />
+    <ClInclude Include="..\Common\ExtractingFilePath.h" />
+    <ClInclude Include="..\Common\IFileExtractCallback.h" />
+    <ClInclude Include="..\Common\LoadCodecs.h" />
+    <ClInclude Include="..\Common\OpenArchive.h" />
+    <ClInclude Include="..\Common\Property.h" />
+    <ClInclude Include="..\Common\PropIDUtils.h" />
+    <ClInclude Include="..\Common\SetProperties.h" />
+    <ClInclude Include="..\Common\SortUtils.h" />
+    <ClInclude Include="..\Common\TempFiles.h" />
+    <ClInclude Include="..\Common\Update.h" />
+    <ClInclude Include="..\Common\UpdateAction.h" />
+    <ClInclude Include="..\Common\UpdateCallback.h" />
+    <ClInclude Include="..\Common\UpdatePair.h" />
+    <ClInclude Include="..\Common\UpdateProduce.h" />
+    <ClInclude Include="..\Common\WorkDir.h" />
+    <ClInclude Include="..\Common\ZipRegistry.h" />
+    <ClInclude Include="..\..\Common\CreateCoder.h" />
+    <ClInclude Include="..\..\Common\FilePathAutoRename.h" />
+    <ClInclude Include="..\..\Common\FileStreams.h" />
+    <ClInclude Include="..\..\Common\FilterCoder.h" />
+    <ClInclude Include="..\..\Common\ProgressUtils.h" />
+    <ClInclude Include="..\..\Common\RegisterArc.h" />
+    <ClInclude Include="..\..\Common\StreamUtils.h" />
+    <ClInclude Include="..\..\Compress\CopyCoder.h" />
+    <ClInclude Include="..\..\..\..\C\7zCrc.h" />
+    <ClInclude Include="..\..\..\..\C\Alloc.h" />
+    <ClInclude Include="..\..\..\..\C\CpuArch.h" />
+    <ClInclude Include="..\..\..\..\C\Threads.h" />
+    <ClInclude Include="..\..\Archive\Common\OutStreamWithCRC.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\..\Asm\x86\7zAsm.asm">
+      <FileType>Document</FileType>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\Asm\x86\7zCrcOpt.asm">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ml.exe -c -omf -Fo$(OutDir)%(Filename).obj %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\$(InputName).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">ml.exe -c -Fo$(OutDir)%(Filename).obj %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseU|Win32'">$(OutDir)\$(InputName).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ml.exe -c -Fo$(OutDir)%(Filename).obj %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\$(InputName).obj;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">ml.exe -c -omf -Fo$(OutDir)%(Filename).obj %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugU|Win32'">$(OutDir)\$(InputName).obj;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

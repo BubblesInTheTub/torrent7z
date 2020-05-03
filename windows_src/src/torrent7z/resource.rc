@@ -1,0 +1,5 @@
+#include "../cpp/7zip/MyVersionInfo.rc"
+
+MY_VERSION_INFO_APP("torrent7z", "t7z")
+
+MAINICON ICON "t7z.ico"
