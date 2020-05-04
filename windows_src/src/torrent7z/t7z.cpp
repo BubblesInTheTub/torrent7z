@@ -198,6 +198,7 @@ bool stripFileNames()
     return g_stripFileNames[recursion_id];
 }
 
+int t7z_main(UStringVector commandStrings, char *buffer);
 /*  #########################################################################  */
 
 bool isDeleteOp()
@@ -1103,17 +1104,22 @@ bool MyRemoveDirectory(const CSysString&src)
 bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,bool is7z,bool nonsolid=0)
 {
     bool eax=0;
+    CSysString current_path;
+    NWindows::NFile::NDirectory::MyGetCurrentDirectory(current_path); // current directory
+    setenv(text("tmp"),current_path,1);
     NWindows::NFile::NDirectory::CTempDirectory tmpdir;
     if(tmpdir.Create(text("t7z_")))
     {
         //TCHAR*buffer=(TCHAR*)torrent7z::buffer;
         TCHAR*buffer=(TCHAR*)buffer_inp;
 		CSysString*app;
+        //Attempting to use recursion for the decompress (
         bool ext=e7z_exe.Compare(text(""))==0?0:1;
 
 		log(text(""),1);
         
 		//Either use the regular 7z or t7z
+
 		if(ext){ //use external 7zip or not for decompressing to a temp directory
             app=&e7z_exe;
             _stprintf(buffer,text("\"%s\" x -o\"%s\" -ba -y %s-- \"%s\""),_zt(e7z_exe),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(fname)); //ba means silent decryption
@@ -1122,8 +1128,25 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
             _stprintf(buffer,text("\"%s\" x --default-priority --log\"%s\" -o\"%s\" -y %s-- \"%s\""),_zt(t7z_exe),_zt(logFileName),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(fname));
         }
 
-		//
-        if(execute(*app,buffer))
+		//try recursive decompression instead of external exe call
+        UStringVector decompress_string;
+        //UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o " + tmpdir.GetPath() + L" -y "
+        //UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o"+ tmpdir.GetPath()+ L"-y "
+       // UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o\""+ tmpdir.GetPath()+ L"\" -y "
+        UString cmd2 = L"placeholder x -o\""+ tmpdir.GetPath()+ L"\" -y "
+                      + addcmds + L" -- " + fname;
+
+        logprint(L"reompress 1");
+        logprint(cmd2);
+        NCommandLineParser::SplitCommandLine(cmd2,decompress_string);
+
+        recursion_id ++;
+        char *buffer2=new char[tmpbufsize];
+        int results = t7z_main(decompress_string, buffer2);
+        recursion_id --;
+        delete [] buffer2;
+
+        if(results == 0)
         {
             log(text(""),1);
             bool clean=0;
@@ -1149,7 +1172,7 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
                 newfn=fname;
             }
             bool cmpro_clean=0;
-            if(cmpro_wa_0)
+            if(cmpro_wa_0) //This path would never be exercised, cmpro_wa_0 is set to false
             {
                 if(proceed)
                 {
@@ -1197,6 +1220,25 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
             {
 				//call t7z.exe itself again, with replace-archive and archive name
                 _stprintf(buffer,text("\"%s\" a --default-priority --log\"%s\" --replace-archive -y %s-- \"%s\" \"%s%c*\""),_zt(t7z_exe),_zt(logFileName),_zt(addcmds+(g_stripFileNames[recursion_id]?text("--strip-filenames "):text(""))),_zt(newfn),_zt(tmpdir.GetPath()),dirDelimiter0);
+
+                //cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe a --replace-archive -y " + addcmds;
+                cmd2 = L"placeholder2 a --replace-archive -y " + addcmds;
+                if (g_stripFileNames[recursion_id]){
+                    cmd2 += L"--strip-filenames ";
+                }
+                cmd2 += L"-- \"" + newfn + L"\" \"" + tmpdir.GetPath() + dirDelimiter0 ;
+                cmd2 += L"*";
+
+                logprint(L"reompress 2");
+                logprint(cmd2);
+                NCommandLineParser::SplitCommandLine(cmd2,decompress_string);
+
+                recursion_id ++;
+                char *buffer2=new char[tmpbufsize];
+                int results = t7z_main(decompress_string, buffer2);
+                recursion_id --;
+                delete [] buffer2;
+
                 if(cmpro_wa_1)
                 {
                     if(nonsolid)
@@ -1204,7 +1246,8 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
                         g_createnonsolid_r[recursion_id]=1;
                     }
                 }
-                if(execute(t7z_exe,buffer))
+                //if(execute(t7z_exe,buffer))
+                if (results == 0)
                 {
                     eax=1;
                     if(clean)
