@@ -135,7 +135,7 @@ bool g_createnonsolid_r[MAX_RECURSIONS];
 //retaining these as global, don't foresee internal recursions setting them
 UINT codePage;
 CSysString logFileName;
-CSysString t7z_exe,e7z_exe;
+//CSysString t7z_exe,e7z_exe;
 
 //BITT: removed this global variable. It's passed through funtion arguments instead
 //char*buffer;
@@ -1112,14 +1112,14 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
     {
         //TCHAR*buffer=(TCHAR*)torrent7z::buffer;
         TCHAR*buffer=(TCHAR*)buffer_inp;
-		CSysString*app;
+		//CSysString*app;
         //Attempting to use recursion for the decompress (
-        bool ext=e7z_exe.Compare(text(""))==0?0:1;
+        //bool ext=e7z_exe.Compare(text(""))==0?0:1;
 
 		log(text(""),1);
         
 		//Either use the regular 7z or t7z
-
+        /*
 		if(ext){ //use external 7zip or not for decompressing to a temp directory
             app=&e7z_exe;
             _stprintf(buffer,text("\"%s\" x -o\"%s\" -ba -y %s-- \"%s\""),_zt(e7z_exe),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(fname)); //ba means silent decryption
@@ -1127,7 +1127,7 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
             app=&t7z_exe;
             _stprintf(buffer,text("\"%s\" x --default-priority --log\"%s\" -o\"%s\" -y %s-- \"%s\""),_zt(t7z_exe),_zt(logFileName),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(fname));
         }
-
+        */
 		//try recursive decompression instead of external exe call
         UStringVector decompress_string;
         //UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o " + tmpdir.GetPath() + L" -y "
@@ -1180,8 +1180,10 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
                     if(file_exists(new_fname))
                     {
                         proceed=0;
-                        _stprintf(buffer,text("\"%s\" x --default-priority --log\"%s\" -o\"%s\" -y %s-- \"%s\""),_zt(t7z_exe),_zt(logFileName),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(new_fname));
-                        if(execute(t7z_exe,buffer))
+                        //_stprintf(buffer,text("\"%s\" x --default-priority --log\"%s\" -o\"%s\" -y %s-- \"%s\""),_zt(t7z_exe),_zt(logFileName),_zt(tmpdir.GetPath()),_zt(addcmds),_zt(new_fname));
+                        //if(execute(t7z_exe,buffer))
+                        logprint (L"Error: code entered forbidden path");
+                        if (false)
                         {
                             finfo fi;
                             memset(((char*)&fi)+sizeof(fi.fileInfo),0,sizeof(finfo)-sizeof(fi.fileInfo));
@@ -1219,7 +1221,7 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
             if(proceed)
             {
 				//call t7z.exe itself again, with replace-archive and archive name
-                _stprintf(buffer,text("\"%s\" a --default-priority --log\"%s\" --replace-archive -y %s-- \"%s\" \"%s%c*\""),_zt(t7z_exe),_zt(logFileName),_zt(addcmds+(g_stripFileNames[recursion_id]?text("--strip-filenames "):text(""))),_zt(newfn),_zt(tmpdir.GetPath()),dirDelimiter0);
+                //_stprintf(buffer,text("\"%s\" a --default-priority --log\"%s\" --replace-archive -y %s-- \"%s\" \"%s%c*\""),_zt(t7z_exe),_zt(logFileName),_zt(addcmds+(g_stripFileNames[recursion_id]?text("--strip-filenames "):text(""))),_zt(newfn),_zt(tmpdir.GetPath()),dirDelimiter0);
 
                 //cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe a --replace-archive -y " + addcmds;
                 cmd2 = L"placeholder2 a --replace-archive -y " + addcmds;
@@ -1672,9 +1674,9 @@ int t7z_main(UStringVector commandStrings, char *buffer)
             GetLocalTime(&st);
             _stprintf(buffer,text("torrent7z_%d%02d%02d%02d%02d%02d.log"),st.wYear,st.wMonth,st.wDay,st.wHour,st.wMinute,st.wSecond); //log filename is made using current date, time etc
         }
-        t7z_exe=text("t7z");
+        //t7z_exe=text("t7z");
         #ifndef _WIN32
-        e7z_exe=text("7z"); //might be external 7z
+        //e7z_exe=text("7z"); //might be external 7z
         if(nolog)
         {
             logFileName=combine_path(cpath,CSysString(buffer));
@@ -1687,8 +1689,9 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 logFileName=combine_path(cpath,CSysString(buffer));
             }
         }
-        cpath=text("");
-        NWindows::NDLL::MyGetModuleFileName(0,cpath); // gets the current executables full path. Stores inside cpath and... put it in the registry .. ?
+        //cpath=text("");
+        //NWindows::NDLL::MyGetModuleFileName(0,cpath); // gets the current executables full path. Stores inside cpath and... put it in the registry .. ?
+        /*
         if(cpath.Length())
         {
             t7z_exe=cpath;
@@ -1700,6 +1703,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 RegCloseKey(hKey);
             }
         }
+        */
         if(nolog)
         {
             if((!g_noninteractive[recursion_id])&&g_IsParentGui[recursion_id])
@@ -1708,6 +1712,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                 logFileName=combine_path(cpath,CSysString(buffer));
             }
         }
+        /*
         e7z_exe=text("7z.exe");
         if(file_exists(e7z_exe)!=1) // is 7z.exe not there ?
         {
@@ -1741,6 +1746,7 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         {
             e7z_exe=text("");
         }
+        */
 #endif
     }
     if(commandStrings.Size()<2) // probably means only one argument was found i.e. sysargv len < 2
