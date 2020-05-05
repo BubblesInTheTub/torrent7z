@@ -943,8 +943,7 @@ CSysString tmp_add_fname(const CSysString&fname,const int ad)
     return combine_path(dirname,text("tmp_")+name+text(".t7ztmp"));
 }
 
-/*  #########################################################################  */
-
+/*  #/*
 #ifdef _WIN32
 STARTUPINFO snfo;
 PROCESS_INFORMATION pi;
@@ -976,9 +975,9 @@ int cp(const CSysString&app,const CSysString&cmd)
     return *((int*)&eax);
 }
 #endif
-
+*/
 /*  #########################################################################  */
-
+/*
 bool execute(const CSysString&app,const CSysString&cmd) //execute a system command (7zip external)
 {
 #ifdef _WIN32
@@ -1040,7 +1039,7 @@ bool execute(const CSysString&app,const CSysString&cmd) //execute a system comma
     }
     return EAX==0;
 }
-
+*/
 /*  #########################################################################  */
 
 bool DeleteFileAlways(const CSysString&src)
