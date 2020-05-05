@@ -78,9 +78,10 @@ bool GetSecondsSince1601(unsigned year, unsigned month, unsigned day,
 
 void GetCurUtcFileTime(FILETIME &ft)
 {
-  SYSTEMTIME st;
-  GetSystemTime(&st);
-  SystemTimeToFileTime(&st, &ft);
+  //SYSTEMTIME st;
+  //GetSystemTime(&st);
+  //SystemTimeToFileTime(&st, &ft);
+  memset(&ft,0,sizeof(FILETIME));
 }
 
 }}

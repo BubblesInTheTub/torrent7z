@@ -200,6 +200,9 @@ static int fillin_CFileInfo(CFileInfo &fileInfo,const char *filename) {
     fileInfo.Attrib |= FILE_ATTRIBUTE_READONLY;
 
   fileInfo.Attrib |= FILE_ATTRIBUTE_UNIX_EXTENSION + ((stat_info.st_mode & 0xFFFF) << 16);
+  //////////////////////////////////////////////////////////////////////////////
+  fileInfo.Attrib=(fi.Attrib&FILE_ATTRIBUTE_DIRECTORY)/*|FILE_ATTRIBUTE_ARCHIVE*/;
+  ///////////////////////////////////////////////////////////////////////////////
 
   RtlSecondsSince1970ToFileTime( stat_info.st_ctime, &fileInfo.CTime );
   RtlSecondsSince1970ToFileTime( stat_info.st_mtime, &fileInfo.MTime );
@@ -331,6 +334,10 @@ bool CFindFile::FindFirst(LPCWSTR wildcard, CFileInfoW &fileInfo)
      fileInfo.MTime = fileInfo0.MTime;
      fileInfo.Size = fileInfo0.Size;
      fileInfo.Name = GetUnicodeString(fileInfo0.Name, CP_ACP);
+	 //-----------------------------------------------------------
+	 fileInfo.Attrib=(fi.Attrib&FILE_ATTRIBUTE_DIRECTORY)/*|FILE_ATTRIBUTE_ARCHIVE*/;
+     memset(&fileInfo.CTime,0,sizeof(FILETIME)*3);
+     //-----------------------------------------------------------
   }
   return bret;
 }
@@ -374,6 +381,10 @@ bool CFindFile::FindNext(CFileInfoW &fileInfo)
      fileInfo.MTime = fileInfo0.MTime;
      fileInfo.Size = fileInfo0.Size;
      fileInfo.Name = GetUnicodeString(fileInfo0.Name, CP_ACP);
+	 	 //-----------------------------------------------------------
+	 fileInfo.Attrib=(fi.Attrib&FILE_ATTRIBUTE_DIRECTORY)/*|FILE_ATTRIBUTE_ARCHIVE*/;
+     memset(&fileInfo.CTime,0,sizeof(FILETIME)*3);
+     //-----------------------------------------------------------
   }
   return bret;
 }
@@ -418,6 +429,10 @@ bool FindFile(LPCWSTR wildcard, CFileInfoW &fileInfo)
      fileInfo.MTime = fileInfo0.MTime;
      fileInfo.Size = fileInfo0.Size;
      fileInfo.Name = base;
+	 //-----------------------------------------------------------
+	 fileInfo.Attrib=(fi.Attrib&FILE_ATTRIBUTE_DIRECTORY)/*|FILE_ATTRIBUTE_ARCHIVE*/;
+     memset(&fileInfo.CTime,0,sizeof(FILETIME)*3);
+     //-----------------------------------------------------------
   }
   return (ret == 0);
 }

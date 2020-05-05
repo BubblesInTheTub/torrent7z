@@ -1,4 +1,4 @@
-PROG=../../../../bin/7z
+PROG=../../../../bin/t7z
 
 LOCAL_FLAGS=\
   -DCOMPRESS_MT \
@@ -83,6 +83,12 @@ LZMA_BENCH_OBJS = \
   LzmaBench.o \
   LzmaBenchCon.o \
 
+T7Z_OBJS = \
+  ..\..\..\torrent7z\t7z.obj \
+  ..\..\..\torrent7z\torrent7z_signature.obj \
+  ..\..\..\torrent7z\w32t.obj \
+  ..\..\..\torrent7z\usage.obj
+
 # Alloc.o
 C_OBJS = \
   Threads.o \
@@ -99,7 +105,8 @@ OBJS = \
   CopyCoder.o \
   $(LZMA_BENCH_OBJS) \
   $(C_OBJS) \
-  $(OBJ_CRC32)
+  $(OBJ_CRC32) \
+  $(T7Z_OBJS)
 
 include ../../../../makefile.glb
 

@@ -39,7 +39,8 @@ namespace NWindows
 		  	if (sysctl(mib, 2, &value, &len, NULL, 0) >= 0)
 		  		if (value > nbcpu)
 					nbcpu = value;
-			return nbcpu;
+			//return nbcpu;
+			return 2;
 		}
 		#elif defined (__FreeBSD__) || defined (__FreeBSD_kernel__)
 		UInt32 GetNumberOfProcessors() {
@@ -48,7 +49,8 @@ namespace NWindows
 			size_t len = sizeof(value);
 			if (sysctlbyname("hw.ncpu", &value, &len, NULL, 0) == 0)
 				nbcpu = value;
-			return nbcpu;
+			//return nbcpu;
+			return 2;
 		}
 		#elif defined (__APPLE__)
 		UInt32 GetNumberOfProcessors() {
@@ -56,14 +58,16 @@ namespace NWindows
 			size_t valSize = sizeof(value);
 			if (sysctlbyname ("hw.ncpu", &value, &valSize, NULL, 0) == 0)
 				nbcpu = value;
-			return nbcpu;
+			//return nbcpu;
+			return 2;
 		}
 
 		#elif defined(__linux__) || defined(__CYGWIN__) || defined(sun)
 		UInt32 GetNumberOfProcessors() {
 		  	int nbcpu = sysconf (_SC_NPROCESSORS_CONF);
 			if (nbcpu < 1) nbcpu = 1;
-			return nbcpu;
+			//return nbcpu;
+			return 2;
 		}
 		#elif defined(hpux) || defined(__hpux)
 		UInt32 GetNumberOfProcessors() {
@@ -90,7 +94,7 @@ namespace NWindows
 		#else
 		#warning Generic GetNumberOfProcessors
 		UInt32 GetNumberOfProcessors() {
-			return 1;
+			return 2;
 		}
 		#endif
 

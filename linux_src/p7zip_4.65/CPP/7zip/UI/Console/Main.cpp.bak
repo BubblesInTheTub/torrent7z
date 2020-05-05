@@ -205,21 +205,18 @@ static inline char GetHex(Byte value)
 }
 
 const char *kUnsupportedArcTypeMessage = "Unsupported archive type";
-namespace torrent7z{extern void SetCommandStrings(UStringVector&cs);}
 
 int Main2(
-  //#ifndef _WIN32
-  //int numArguments, const char *arguments[]
-  //#endif
-  UStringVector commandStrings
+  #ifndef _WIN32
+  int numArguments, const char *arguments[]
+  #endif
 )
 {
   #ifdef _WIN32
   SetFileApisToOEM();
   #endif
   
-  //UStringVector commandStrings;
-/*
+  UStringVector commandStrings;
   #ifdef _WIN32
   NCommandLineParser::SplitCommandLine(GetCommandLineW(), commandStrings);
   #else
@@ -227,7 +224,6 @@ int Main2(
   extern void mySplitCommandLine(int numArguments,const char *arguments[],UStringVector &parts);
   mySplitCommandLine(numArguments,arguments,commandStrings);
   #endif
-*/
 
   if(commandStrings.Size() == 1)
   {
@@ -380,7 +376,7 @@ int Main2(
     #endif
     return S_OK;
   }
- /* else if (options.Command.CommandType == NCommandType::kBenchmark)
+  else if (options.Command.CommandType == NCommandType::kBenchmark)
   {
     if (options.Method.CompareNoCase(L"CRC") == 0)
     {
@@ -412,7 +408,7 @@ int Main2(
         throw CSystemException(res);
       }
     }
-  }*/
+  }
   else if (isExtractGroupCommand || options.Command.CommandType == NCommandType::kList)
   {
     if(isExtractGroupCommand)

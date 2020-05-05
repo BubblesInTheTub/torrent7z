@@ -691,14 +691,7 @@ void COutArchive::WriteHeader(
     size_t namesDataSize = 0;
     for (int i = 0; i < db.Files.Size(); i++)
     {
-      UString name = db.Files[i].Name;
-      if(torrent7z::stripFileNames())
-      {
-          if(db.Files.Size()==1)
-          {
-            name=L"";
-          }
-      }
+      const UString &name = db.Files[i].Name;
       if (!name.IsEmpty())
         numDefined++;
       namesDataSize += (name.Length() + 1) * 2;
