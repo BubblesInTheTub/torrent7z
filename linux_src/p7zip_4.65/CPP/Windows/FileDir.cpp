@@ -6,6 +6,10 @@
 #include "FileName.h"
 #include "FileFind.h"
 #include "Defs.h"
+//For the random number
+#include <ctime>
+#include <stdlib.h>
+
 #include "../Common/StringConvert.h"
 
 #define NEED_NAME_WINDOWS_TO_UNIX
@@ -677,15 +681,20 @@ bool CreateComplexDirectory(LPCWSTR _aPathName)
 
 bool DeleteFileAlways(LPCTSTR name)
 {
+#ifndef _UNICODE
+  //Not sure what this checks for (maybe if name is empty?)
   if (!name || !*name) {
     SetLastError(ERROR_PATH_NOT_FOUND);
     return false;
   }
+#endif
 #ifdef _UNICODE
    AString unixname = nameWindowToUnix2(name);
 #else
    const char * unixname = nameWindowToUnix(name);
 #endif
+   //printf("unix name");
+   //printf(unixname);
    bool bret = false;
    if (remove(unixname) == 0) bret = true;
    TRACEN((printf("DeleteFileAlways(%s)=%d\n",unixname,(int)bret)))
@@ -810,7 +819,7 @@ UINT CTempFile::Create(LPCTSTR dirPath, LPCTSTR prefix, CSysString &resultPath)
   UINT number = (UINT)getpid();
   TCHAR * buf = resultPath.GetBuffer(MAX_PATH);
 #ifdef _UNICODE
-  swprintf(buf,MAX_PATH,L"%s%s%d.tmp",dirPath,prefix,(int)number);
+  swprintf(buf,MAX_PATH,L"%ls%ls%d.tmp",dirPath,prefix,(int)number);
 #else
   snprintf(buf,MAX_PATH,"%s%s%d.tmp",dirPath,prefix,(int)number);
 #endif
@@ -820,6 +829,10 @@ UINT CTempFile::Create(LPCTSTR dirPath, LPCTSTR prefix, CSysString &resultPath)
   {
     _fileName = resultPath;
     _mustBeDeleted = true;
+    //Create the file, just testing if it'll clear the flow
+    FILE *fp = fopen(UnicodeStringToMultiByte(_fileName, CP_ACP), "w");
+    if(fp)
+    	fclose(fp);
   }
   return number;
 }
@@ -831,7 +844,7 @@ bool CTempFile::Create(LPCTSTR prefix, CSysString &resultPath)
   #ifdef _WIN32
   tempPath = L".\\";
   #else
-  tempPath = L"./";
+  tempPath = L"/tmp/";
   #endif
   //if (!MyGetTempPath(tempPath))
   //  return false;
@@ -850,23 +863,37 @@ bool CreateTempDirectory(LPCTSTR prefix, CSysString &dirName)
   CRandom random;
   random.Init();
   */
+  srand((unsigned) time(0) );
+  
   for (;;)
   {
     CTempFile tempFile;
-    if (!tempFile.Create(prefix, dirName))
+    if (!tempFile.Create(prefix, dirName)){
+	printf("erro Dir1\n");
       return false;
-    if (!tempFile.Remove())
+    }
+    printf(UnicodeStringToMultiByte(dirName,CP_ACP) );
+    if (!tempFile.Remove()){
+	  printf("Error Dir2\n");
       return false;
-    /*
-    UINT32 randomNumber = random.Generate();
+    }
+    //UINT32 randomNumber = random.Generate();
+    UINT32 randomNumber = rand();
     TCHAR randomNumberString[32];
+    printf("Testing %d\n", randomNumber);
+    swprintf(randomNumberString,32,L"%d.tmp",randomNumber);
+    /*
     _stprintf(randomNumberString, _T("%04X"), randomNumber);
     dirName = prefix + randomNumberString;
     */
+    dirName += randomNumberString;
     if (NFind::DoesFileExist(dirName))
       continue;
-    if (MyCreateDirectory(dirName))
+    if (MyCreateDirectory(dirName)){
+	   printf("Success Dir1\n");
+	   printf(UnicodeStringToMultiByte( dirName, CP_ACP));
       return true;
+    }
     if (::GetLastError() != ERROR_ALREADY_EXISTS)
       return false;
   }
@@ -972,6 +999,7 @@ bool CTempFile::Remove()
 {
   if (!_mustBeDeleted)
     return true;
+  //printf(UnicodeStringToMultiByte( _fileName, CP_ACP));
   _mustBeDeleted = !DeleteFileAlways(_fileName);
   return !_mustBeDeleted;
 }
