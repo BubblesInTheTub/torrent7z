@@ -824,6 +824,150 @@ UINT CTempFile::Create(LPCTSTR dirPath, LPCTSTR prefix, CSysString &resultPath)
   return number;
 }
 
+
+bool CTempFile::Create(LPCTSTR prefix, CSysString &resultPath)
+{
+  CSysString tempPath;
+  #ifdef _WIN32
+  tempPath = L".\\";
+  #else
+  tempPath = L"./";
+  #endif
+  //if (!MyGetTempPath(tempPath))
+  //  return false;
+  //if (Create(tempPath, prefix, resultPath) != 0)
+  //  return true;
+  //if (!MyGetWindowsDirectory(tempPath))
+  //  return false;
+  return (Create(tempPath, prefix, resultPath) != 0);
+}
+
+
+bool CreateTempDirectory(LPCTSTR prefix, CSysString &dirName)
+{
+  /*
+  CSysString prefix = tempPath + prefixChars;
+  CRandom random;
+  random.Init();
+  */
+  for (;;)
+  {
+    CTempFile tempFile;
+    if (!tempFile.Create(prefix, dirName))
+      return false;
+    if (!tempFile.Remove())
+      return false;
+    /*
+    UINT32 randomNumber = random.Generate();
+    TCHAR randomNumberString[32];
+    _stprintf(randomNumberString, _T("%04X"), randomNumber);
+    dirName = prefix + randomNumberString;
+    */
+    if (NFind::DoesFileExist(dirName))
+      continue;
+    if (MyCreateDirectory(dirName))
+      return true;
+    if (::GetLastError() != ERROR_ALREADY_EXISTS)
+      return false;
+  }
+}
+
+bool CTempDirectory::Create(LPCTSTR prefix)
+{
+  Remove();
+  return (_mustBeDeleted = CreateTempDirectory(prefix, _tempDir));
+}
+
+#ifndef _UNICODE
+
+bool CreateTempDirectory(LPCWSTR prefix, UString &dirName)
+{
+  /*
+  CSysString prefix = tempPath + prefixChars;
+  CRandom random;
+  random.Init();
+  */
+  for (;;)
+  {
+    CTempFileW tempFile;
+    if (!tempFile.Create(prefix, dirName))
+      return false;
+    if (!tempFile.Remove())
+      return false;
+    /*
+    UINT32 randomNumber = random.Generate();
+    TCHAR randomNumberString[32];
+    _stprintf(randomNumberString, _T("%04X"), randomNumber);
+    dirName = prefix + randomNumberString;
+    */
+    if (NFind::DoesFileExist(dirName))
+      continue;
+    if (MyCreateDirectory(dirName))
+      return true;
+    if (::GetLastError() != ERROR_ALREADY_EXISTS)
+      return false;
+  }
+}
+
+bool CTempDirectoryW::Create(LPCWSTR prefix)
+{
+  Remove();
+  return (_mustBeDeleted = CreateTempDirectory(prefix, _tempDir));
+}
+
+#endif
+
+
+static bool RemoveDirectorySubItems2(const CSysString pathPrefix, const NFind::CFileInfo &fileInfo)
+{
+  //AString temp_pathPrefix = UnicodeStringToMultiByte(pathPrefix, CP_ACP);
+  CSysString temp_FileName = MultiByteToUnicodeString (fileInfo.Name, CP_ACP);
+  if (fileInfo.IsDir())
+    //return RemoveDirectoryWithSubItems(pathPrefix + fileInfo.Name);
+    return RemoveDirectoryWithSubItems(pathPrefix + temp_FileName);
+  //return DeleteFileAlways(temp_pathPrefix + fileInfo.Name);
+  return DeleteFileAlways(pathPrefix + temp_FileName);
+}
+
+bool RemoveDirectoryWithSubItems(const CSysString &path)
+{
+  NFind::CFileInfo fileInfo;
+  CSysString pathPrefix = path + NName::kDirDelimiter;
+  {
+    NFind::CEnumerator enumerator(UnicodeStringToMultiByte(pathPrefix + (NName::kAnyStringWildcard), CP_ACP) );
+    //NFind::CEnumerator enumerator(pathPrefix + TCHAR(NName::kAnyStringWildcard));
+    while (enumerator.Next(fileInfo))
+      if (!RemoveDirectorySubItems2(pathPrefix, fileInfo))
+        return false;
+  }
+  if (!MySetFileAttributes(path, 0))
+    return false;
+  return MyRemoveDirectory(path);
+}
+
+#ifndef _UNICODE
+static bool RemoveDirectorySubItems2(const UString pathPrefix, const NFind::CFileInfoW &fileInfo)
+{
+  if (fileInfo.IsDir())
+    return RemoveDirectoryWithSubItems(pathPrefix + fileInfo.Name);
+  return DeleteFileAlways(pathPrefix + fileInfo.Name);
+}
+bool RemoveDirectoryWithSubItems(const UString &path)
+{
+  NFind::CFileInfoW fileInfo;
+  UString pathPrefix = path + UString(NName::kDirDelimiter);
+  {
+    NFind::CEnumeratorW enumerator(pathPrefix + UString(NName::kAnyStringWildcard));
+    while (enumerator.Next(fileInfo))
+      if (!RemoveDirectorySubItems2(pathPrefix, fileInfo))
+        return false;
+  }
+  if (!MySetFileAttributes(path, 0))
+    return false;
+  return MyRemoveDirectory(path);
+}
+#endif
+
 bool CTempFile::Remove()
 {
   if (!_mustBeDeleted)

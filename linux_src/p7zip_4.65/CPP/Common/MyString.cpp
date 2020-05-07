@@ -22,6 +22,7 @@
 #define MB_LEN_MAX 1024
 #endif
 
+#include "include_windows/windows.h"
 #include "myPrivate.h"
 
 LPSTR WINAPI CharPrevA( LPCSTR start, LPCSTR ptr ) { // OK for MBS

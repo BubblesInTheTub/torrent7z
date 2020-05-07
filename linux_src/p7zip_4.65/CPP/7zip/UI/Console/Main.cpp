@@ -553,9 +553,11 @@ int Main2(
         errorInfo, &openCallback, &callback);
 
 #ifdef ENV_UNIX
+    //likely don't need sfxmode for torrent7z
+    /*
     if (uo.SfxMode)
     {
-        void myAddExeFlag(const UString &name);
+        extern void myAddExeFlag(const UString &name);
         for(int i = 0; i < uo.Commands.Size(); i++)
         {
             CUpdateArchiveCommand &command = uo.Commands[i];
@@ -565,6 +567,7 @@ int Main2(
             }
         }
     }
+    */
 #endif
 
     int exitCode = NExitCode::kSuccess;

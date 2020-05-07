@@ -42,6 +42,12 @@ bool DeleteFileAlways(LPCTSTR name);
 bool DeleteFileAlways(LPCWSTR name);
 #endif
 
+bool RemoveDirectoryWithSubItems(const CSysString &path);
+
+#ifndef _UNICODE
+bool RemoveDirectoryWithSubItems(const UString &path);
+#endif
+
 #ifndef _WIN32_WCE
 bool MyGetFullPathName(LPCTSTR fileName, CSysString &resultPath, 
     int &fileNamePartStartIndex);
@@ -75,11 +81,56 @@ public:
   ~CTempFile() { Remove(); }
   void DisableDeleting() { _mustBeDeleted = false; }
   UINT Create(LPCTSTR dirPath, LPCTSTR prefix, CSysString &resultPath);
+  bool Create(LPCTSTR prefix, CSysString &resultPath);
   bool Remove();
 };
 
 #ifdef _UNICODE
 typedef CTempFile CTempFileW;
+#endif
+
+bool CreateTempDirectory(LPCTSTR prefixChars, CSysString &dirName);
+
+class CTempDirectory
+{
+  bool _mustBeDeleted;
+  CSysString _tempDir;
+public:
+  const CSysString &GetPath() const { return _tempDir; }
+  CTempDirectory(): _mustBeDeleted(false) {}
+  ~CTempDirectory() { Remove();  }
+  bool Create(LPCTSTR prefix) ;
+  bool Remove()
+  {
+    if (!_mustBeDeleted)
+      return true;
+    _mustBeDeleted = !RemoveDirectoryWithSubItems(_tempDir);
+    return (!_mustBeDeleted);
+  }
+  void DisableDeleting() { _mustBeDeleted = false; }
+};
+
+#ifdef _UNICODE
+typedef CTempDirectory CTempDirectoryW;
+#else
+class CTempDirectoryW
+{
+  bool _mustBeDeleted;
+  UString _tempDir;
+public:
+  const UString &GetPath() const { return _tempDir; }
+  CTempDirectoryW(): _mustBeDeleted(false) {}
+  ~CTempDirectoryW() { Remove();  }
+  bool Create(LPCWSTR prefix) ;
+  bool Remove()
+  {
+    if (!_mustBeDeleted)
+      return true;
+    _mustBeDeleted = !RemoveDirectoryWithSubItems(_tempDir);
+    return (!_mustBeDeleted);
+  }
+  void DisableDeleting() { _mustBeDeleted = false; }
+};
 #endif
 
 }}}

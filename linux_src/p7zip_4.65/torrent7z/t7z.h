@@ -24,7 +24,7 @@ const bool debug=false;
 #endif
 
 #ifdef _UNICODE
-#define text(x) TEXT(x)
+//#define text(x) TEXT(x)
 #define u2a(a) (a)
 #define a2u(u) (u)
 #else

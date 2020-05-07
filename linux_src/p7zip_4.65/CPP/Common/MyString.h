@@ -7,6 +7,7 @@
 // #include <wchar.h>
 
 #include "MyVector.h"
+#include "../include_windows/windows.h"
 
 LPSTR WINAPI CharNextA( LPCSTR ptr );
 LPSTR WINAPI CharPrevA( LPCSTR start, LPCSTR ptr );
@@ -69,7 +70,7 @@ int MyStringCollateNoCase(const wchar_t *s1, const wchar_t *s2);
 int MyStringCompare(const char *s1, const char  *s2);
 int MyStringCompare(const wchar_t *s1, const wchar_t *s2);
 
-// int MyStringCompareNoCase(const char *s1, const char  *s2);
+int MyStringCompareNoCase(const char *s1, const char  *s2);
 int MyStringCompareNoCase(const wchar_t *s1, const wchar_t *s2);
 
 template <class T>

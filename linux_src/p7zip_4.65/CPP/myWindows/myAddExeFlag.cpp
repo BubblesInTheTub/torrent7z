@@ -13,13 +13,13 @@
 
 void myAddExeFlag(LPCTSTR filename)
 {
-	const char * name = nameWindowToUnix(filename);
+	const char * name = nameWindowToUnix(UnicodeStringToMultiByte(filename, CP_ACP));
 	// printf("myAddExeFlag(%s)\n",name);
 	chmod(name,0700);
 }
-
+/*
 void myAddExeFlag(const UString &u_name)
 {
 	myAddExeFlag(UnicodeStringToMultiByte(u_name, CP_ACP));
 }
-
+*/

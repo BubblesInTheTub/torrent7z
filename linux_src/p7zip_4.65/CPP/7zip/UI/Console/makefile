@@ -5,7 +5,12 @@ LOCAL_FLAGS=\
   -DEXTERNAL_LZMA \
   -DEXTERNAL_CODECS \
   -DBREAK_HANDLER \
-  -DBENCH_MT
+  -DBENCH_MT \
+  -D_NO_CRYPTO \
+  -DWIN_LONG_PATH \
+  -DUNICODE \
+  -D_UNICODE \
+  -DBUILD_SHARED_LIB=OFF
 
 include ../../../../makefile.crc32
 include ../../../../makefile.machine
@@ -33,6 +38,7 @@ COMMON_OBJS = \
   StdOutStream.o \
   MyString.o \
   MyWindows.o \
+  myGetTickCount.o \
   StringConvert.o \
   StringToInt.o \
   UTFConvert.o \
@@ -57,6 +63,7 @@ WIN_OBJS = \
   FileStreams.o \
   ProgressUtils.o \
   StreamUtils.o \
+  7zHeader.o \
 
 # WorkDir.o
 UI_COMMON_OBJS = \
@@ -84,10 +91,10 @@ LZMA_BENCH_OBJS = \
   LzmaBenchCon.o \
 
 T7Z_OBJS = \
-  ..\..\..\torrent7z\t7z.obj \
-  ..\..\..\torrent7z\torrent7z_signature.obj \
-  ..\..\..\torrent7z\w32t.obj \
-  ..\..\..\torrent7z\usage.obj
+  ../../../../torrent7z/t7z.o \
+  ../../../../torrent7z/torrent7z_signature.o \
+  ../../../../torrent7z/w32t.o \
+  ../../../../torrent7z/usage.o
 
 # Alloc.o
 C_OBJS = \

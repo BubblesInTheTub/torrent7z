@@ -3,7 +3,12 @@ LOCAL_FLAGS= \
   -DCOMPRESS_BZIP2_MT \
   -DCOMPRESS_MF_MT \
   -DBREAK_HANDLER \
-  -DBENCH_MT
+  -DBENCH_MT \
+  -D_NO_CRYPTO \
+  -DWIN_LONG_PATH \
+  -DUNICODE \
+  -D_UNICODE \
+  -DBUILD_SHARED_LIB=OFF
 
 include ../../../../makefile.crc32
 include ../../../../makefile.machine
@@ -11,6 +16,12 @@ include ../../../../makefile.machine
 PROG=../../../../bin/7za$(BINSUFFIX)
 
 LIBS=$(LOCAL_LIBS)
+
+T7Z_OBJS = \
+  ../../../../torrent7z/t7z.o \
+  ../../../../torrent7z/torrent7z_signature.o \
+  ../../../../torrent7z/w32t.o \
+  ../../../../torrent7z/usage.o
 
 CONSOLE_OBJS = \
   ConsoleClose.o \
@@ -273,7 +284,8 @@ mySplitCommandLine.o \
   $(LZMA_BENCH_OBJS) \
   $(CRYPTO_OBJS) \
   $(C_OBJS) \
-  $(OBJ_CRC32)
+  $(OBJ_CRC32) \
+  $(T7Z_OBJS)
 
 include ../../../../makefile.glb
 

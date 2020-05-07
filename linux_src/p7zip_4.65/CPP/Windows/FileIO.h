@@ -53,6 +53,8 @@ public:
 
   bool Seek(INT64 distanceToMove, DWORD moveMethod, UINT64 &newPosition);
   bool Seek(UINT64 position, UINT64 &newPosition);
+  bool SeekToBegin();
+  bool SeekToEnd(UInt64 &newPosition);
 };
 
 class CInFile: public CFileBase

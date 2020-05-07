@@ -4,6 +4,7 @@
 
 #include <tchar.h>
 #include "StdInStream.h"
+#include "Common/StringConvert.h"
 
 #ifdef _MSC_VER
 // "was declared deprecated" disabling
@@ -24,7 +25,9 @@ CStdInStream g_StdIn(stdin);
 bool CStdInStream::Open(LPCTSTR fileName)
 {
   Close();
-  _stream = _tfopen(fileName, kFileOpenMode);
+  //_stream = fopen(fileName, kFileOpenMode);
+  _stream = fopen(UnicodeStringToMultiByte(fileName, CP_ACP),
+		  UnicodeStringToMultiByte(kFileOpenMode, CP_ACP));
   _streamIsOpen = (_stream != 0);
   return _streamIsOpen;
 }

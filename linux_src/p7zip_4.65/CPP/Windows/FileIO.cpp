@@ -253,6 +253,18 @@ bool CFileBase::Seek(UINT64 position, UINT64 &newPosition)
   return Seek(position, FILE_BEGIN, newPosition);
 }
 
+bool CFileBase::SeekToBegin()
+{
+  UInt64 newPosition;
+  return Seek(0, newPosition);
+}
+
+bool CFileBase::SeekToEnd(UInt64 &newPosition)
+{
+  return Seek(0, FILE_END, newPosition);
+}
+
+
 /////////////////////////
 // CInFile
 
