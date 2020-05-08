@@ -24,6 +24,7 @@ L"  t: Test integrity of archive\n" \
 L"  x: eXtract files with full paths\n" \
 L"\n" \
 L"<Switches>\n" \
+L"  -K: Keep the original extension when creating archive name\n" \
 L"  -ba: Disable copyright info\n" \
 L"  -bd: Disable percentage indicator\n" \
 L"  -o{Directory}: set Output directory\n" \
