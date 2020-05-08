@@ -129,6 +129,7 @@ bool g_nplus[MAX_RECURSIONS];
 bool g_nocopyright[MAX_RECURSIONS];
 bool g_createnonsolid[MAX_RECURSIONS];
 bool g_createnonsolid_r[MAX_RECURSIONS];
+bool g_keepExtension[MAX_RECURSIONS];
 //Shifting to local space
 //CSysString addcmds(text(""));
 
@@ -223,7 +224,27 @@ void initialize_global_switches(){
         g_yplus[i]=false;
         g_nplus[i]=false;    
         g_nocopyright[i]=false;
+        g_keepExtension[i] = false;
     }
+}
+
+//Function takes in a filename and strips the extension, upto a max number of characters
+//returns 0 on error, 1 if extension got replaced and 2 if it wasn't
+short stripExtension(UString &filename, short int max_extension_chars=4){
+    short int i, char_count, length = filename.Length();
+    const TCHAR marker = '.';
+    for (i=length - 1; i > 0 ; i--){
+        if (filename[i] == marker)
+            break;
+    }
+    if (i == 0)
+        return 0;
+    char_count = length - i - 1;
+    if ( char_count < max_extension_chars ){
+        filename.Delete(i, char_count + 1 );
+        return 1;
+    }
+    return 2;
 }
 
 /*  #########################################################################  */
@@ -1489,6 +1510,11 @@ int t7z_main(UStringVector commandStrings, char *buffer)
             commandStrings.Delete(i);
             i--;
         }
+        if (commandStrings[i].CompareNoCase(L"-K") == 0){ // keep extension name
+            g_keepExtension[recursion_id] = true;
+            commandStrings.Delete(i);
+            i--;
+        }    
     }
     print_copyright(); // displays this file name and 7z copyright
     int operation_mode=1;
@@ -1993,6 +2019,9 @@ int t7z_main(UStringVector commandStrings, char *buffer)
                             }
                             if(((fe&2)!=0)||(is_t7z(u2a(archive[0]), buffer)==0)) // if not dir or not a t7z (guess this is where they add the archive name if not specified)
                             {
+                                if (! g_keepExtension[recursion_id]){
+                                    stripExtension(archive[0]);
+                                }
                                 archive[0]+=L".7z";
                                 t7z_commandStrings.Add(commandStrings[i]);
                                 if(process_mask(u2a(commandStrings[i]),fenum,&fi)==0)
