@@ -869,18 +869,18 @@ bool CreateTempDirectory(LPCTSTR prefix, CSysString &dirName)
   {
     CTempFile tempFile;
     if (!tempFile.Create(prefix, dirName)){
-	printf("erro Dir1\n");
+	//printf("erro Dir1\n");
       return false;
     }
     printf(UnicodeStringToMultiByte(dirName,CP_ACP) );
     if (!tempFile.Remove()){
-	  printf("Error Dir2\n");
+	  //printf("Error Dir2\n");
       return false;
     }
     //UINT32 randomNumber = random.Generate();
     UINT32 randomNumber = rand();
     TCHAR randomNumberString[32];
-    printf("Testing %d\n", randomNumber);
+    //printf("Testing %d\n", randomNumber);
     swprintf(randomNumberString,32,L"%d.tmp",randomNumber);
     /*
     _stprintf(randomNumberString, _T("%04X"), randomNumber);
@@ -890,8 +890,8 @@ bool CreateTempDirectory(LPCTSTR prefix, CSysString &dirName)
     if (NFind::DoesFileExist(dirName))
       continue;
     if (MyCreateDirectory(dirName)){
-	   printf("Success Dir1\n");
-	   printf(UnicodeStringToMultiByte( dirName, CP_ACP));
+	   //printf("Success Dir1\n");
+	   //printf(UnicodeStringToMultiByte( dirName, CP_ACP));
       return true;
     }
     if (::GetLastError() != ERROR_ALREADY_EXISTS)
