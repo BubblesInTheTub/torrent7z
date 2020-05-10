@@ -1,8 +1,0 @@
-path:
-	C:\Documents and Settings\Amith\My Documents\Downloads\t7z-master\src\torrent7z
-
-make command: (use program files> visual studio > visual studio command prompt (2010)
-	nmake
-
-debugger command:
-	devenv /debugexe O\t7z.exe a makefile
