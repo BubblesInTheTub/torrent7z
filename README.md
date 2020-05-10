@@ -8,7 +8,7 @@ time they were created as long as they have the same hash.
 
 This is invaluable for sharing archives using bittorrent.
 
-Dirctories
+Directories
 ==========
 releases    :- Contains the binaries for Windows and Linux
 linux_src   :- Source code for the Linux platform
