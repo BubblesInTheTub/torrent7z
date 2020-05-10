@@ -11,7 +11,9 @@ This is invaluable for sharing archives using bittorrent.
 Directories
 ==========
 releases    :- Contains the binaries for Windows and Linux
+
 linux_src   :- Source code for the Linux platform
+
 windows_src :- Source code for the Windows platform
 
 
