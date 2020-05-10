@@ -7,13 +7,14 @@ LOCAL_FLAGS= \
   -D_NO_CRYPTO \
   -DWIN_LONG_PATH \
   -DUNICODE \
+  -fPIE \
   -D_UNICODE \
   -DBUILD_SHARED_LIB=OFF
 
 include ../../../../makefile.crc32
 include ../../../../makefile.machine
 
-PROG=../../../../bin/7za$(BINSUFFIX)
+PROG=../../../../bin/linux_t7z$(BINSUFFIX)
 
 LIBS=$(LOCAL_LIBS)
 
