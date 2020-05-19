@@ -14,7 +14,7 @@ LOCAL_FLAGS= \
 include ../../../../makefile.crc32
 include ../../../../makefile.machine
 
-PROG=../../../../bin/linux_t7z$(BINSUFFIX)
+PROG=../../../../bin/t7z$(BINSUFFIX)
 
 LIBS=$(LOCAL_LIBS)
 
