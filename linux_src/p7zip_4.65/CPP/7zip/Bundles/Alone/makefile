@@ -19,10 +19,10 @@ PROG=../../../../bin/t7z$(BINSUFFIX)
 LIBS=$(LOCAL_LIBS)
 
 T7Z_OBJS = \
-  ../../../../torrent7z/t7z.o \
-  ../../../../torrent7z/torrent7z_signature.o \
-  ../../../../torrent7z/w32t.o \
-  ../../../../torrent7z/usage.o
+  t7z.o \
+  torrent7z_signature.o \
+  w32t.o \
+  usage.o
 
 CONSOLE_OBJS = \
   ConsoleClose.o \
