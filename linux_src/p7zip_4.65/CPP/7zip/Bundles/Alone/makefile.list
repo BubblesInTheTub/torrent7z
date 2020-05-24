@@ -201,7 +201,12 @@ SRCS=\
  ../../Crypto/Sha1.cpp \
  ../../Crypto/WzAes.cpp \
  ../../Crypto/ZipCrypto.cpp \
- ../../Crypto/ZipStrong.cpp
+ ../../Crypto/ZipStrong.cpp \
+ \
+ ../../../../torrent7z/t7z.cpp \
+ ../../../../torrent7z/torrent7z_signature.cpp \
+ ../../../../torrent7z/w32t.cpp \
+ ../../../../torrent7z/usage.cpp
 
 SRCS_C=\
  ../../../../C/Bra.c \

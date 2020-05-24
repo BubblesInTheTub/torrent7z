@@ -558,3 +558,16 @@ HuffEnc.o : ../../../../C/HuffEnc.c
 7zCrcT8.o : ../../../../C/7zCrcT8.c
 	$(CC) $(CFLAGS) ../../../../C/7zCrcT8.c
 
+# t7z additional files
+t7z.o : ../../../../torrent7z/t7z.cpp
+	$(CXX) $(CXXFLAGS) ../../../../torrent7z/t7z.cpp
+
+torrent7z_signature.o : ../../../../torrent7z/torrent7z_signature.cpp
+	$(CXX) $(CXXFLAGS) ../../../../torrent7z/torrent7z_signature.cpp
+
+w32t.o : ../../../../torrent7z/w32t.cpp
+	$(CXX) $(CXXFLAGS) ../../../../torrent7z/w32t.cpp
+
+usage.o : ../../../../torrent7z/usage.cpp
+	$(CXX) $(CXXFLAGS) ../../../../torrent7z/usage.cpp
+
