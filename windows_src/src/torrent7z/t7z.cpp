@@ -1481,7 +1481,8 @@ void print_copyright()
         setenv(_zt(MultiByteToUnicodeString(t7zsig_str,CP_ACP)),text("1"),1);
         if(!g_nocopyright[recursion_id])
         {
-            logprint(text("\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
+            //logprint(text("\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
+			logprint((L"\ntorrent7z v1.1 (May 24th, 2020)/\n"),~2);
             logprint(text("using ")+MultiByteToUnicodeString(k7zCopyrightString,CP_ACP)+text("\n\n"),~2);
         }
         g_firstInstance[recursion_id]=1;
