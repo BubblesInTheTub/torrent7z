@@ -1,9 +1,17 @@
-torrent7z v0.1 (5/6/2020)
-=========================
--Initial fork of torrent7z. Stripped out external 7z dependency.
--Stripped unnecessary platform dependency on Windows
+
+torrent7z v1.1 (5/22/2020)
+==========================
+-Changed default behaviour to not recursively search for the input file. Earlier if the sub directories contained one of the input files, they'd get added too
+-- This behaviour can be re-enabled with the -rs switch
+-Cleaned up some aspects of the code and workspace (thanks Sigmaboy)
+
 
 torrent7z v0.2 (5/8/2020)
 =========================
 -When no output 7z filename is provided, torrent7z now defaults to stripping the extension of the input file.
   -Added an option (-K) to keep the extension (like with the previous version).
+
+torrent7z v0.1 (5/6/2020)
+=========================
+-Initial fork of torrent7z. Stripped out external 7z dependency.
+-Stripped unnecessary platform dependency on Windows

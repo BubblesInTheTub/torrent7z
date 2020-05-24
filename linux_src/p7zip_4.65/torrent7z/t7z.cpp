@@ -20,27 +20,27 @@
 //#define _stprintf swprintf_s
 
 #include "algorithm" // for min, max
-#include "../cpp/include_windows/windows.h"
-#include "../cpp/Common/MyString.h"
-#include "../cpp/Common/IntToString.h"
-#include "../cpp/Common/StringConvert.h"
-#include "../cpp/Common/Wildcard.h"
-#include "../cpp/Common/CommandLineParser.h"
-#include "../cpp/Common/ListFileUtils.h"
-#include "../cpp/Common/StdOutStream.h"
-#include "../cpp/Windows/FileFind.h"
-#include "../cpp/Windows/FileDir.h"
-#include "../cpp/Windows/FileIO.h"
-#include "../cpp/Windows/DLL.h"
-#include "../cpp/Windows/Time.h"
-#include "../cpp/7zip/Archive/7z/7zHandler.h"
-#include "../cpp/7zip/UI/Common/ExitCode.h"
-#include "../cpp/7zip/MyVersion.h"
+#include "../CPP/include_windows/windows.h"
+#include "../CPP/Common/MyString.h"
+#include "../CPP/Common/IntToString.h"
+#include "../CPP/Common/StringConvert.h"
+#include "../CPP/Common/Wildcard.h"
+#include "../CPP/Common/CommandLineParser.h"
+#include "../CPP/Common/ListFileUtils.h"
+#include "../CPP/Common/StdOutStream.h"
+#include "../CPP/Windows/FileFind.h"
+#include "../CPP/Windows/FileDir.h"
+#include "../CPP/Windows/FileIO.h"
+#include "../CPP/Windows/DLL.h"
+#include "../CPP/Windows/Time.h"
+#include "../CPP/7zip/Archive/7z/7zHandler.h"
+#include "../CPP/7zip/UI/Common/ExitCode.h"
+#include "../CPP/7zip/MyVersion.h"
 
 
 extern "C"
 {
-    #include "../c/7zCrc.h"
+    #include "../C/7zCrc.h"
 }
 
 #include "t7z.h"
@@ -134,6 +134,7 @@ bool g_nocopyright[MAX_RECURSIONS];
 bool g_createnonsolid[MAX_RECURSIONS];
 bool g_createnonsolid_r[MAX_RECURSIONS];
 bool g_keepExtension[MAX_RECURSIONS];
+bool g_searchFilesRecursive[MAX_RECURSIONS];
 //Shifting to local space
 //CSysString addcmds((L""));
 
@@ -244,6 +245,7 @@ void initialize_global_switches(){
         g_nplus[i]=false;    
         g_nocopyright[i]=false;
         g_keepExtension[i] = false;
+	g_searchFilesRecursive[i] = false;
     }
 }
 
@@ -679,6 +681,8 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
             }
         }
     }
+    if (g_searchFilesRecursive[recursion_id] == false)
+	return EAX;
     NWindows::NFile::NFind::CEnumerator match_dir(u2a_(combine_path(path,(L"*"))) );
     while(match_dir.Next(fileInfo))
     {
@@ -1499,7 +1503,8 @@ void print_copyright()
         setenv(t7zsig_str,("1"),1);
         if(!g_nocopyright[recursion_id])
         {
-            logprint((L"\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+(L"/")+(L"\n"),~2);
+            //logprint((L"\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+(L"/")+(L"\n"),~2);
+            logprint((L"\ntorrent7z v1.1 (May 24th, 2020)/\n"),~2);
             //logprint((L"\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+(L"/")+(L__TIMESTAMP__)+(L"\n"),~2);
             logprint((L"using ")+MultiByteToUnicodeString(k7zCopyrightString,CP_ACP)+(L"\n\n"),~2);
         }
@@ -1535,6 +1540,11 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         }
         if (commandStrings[i].CompareNoCase(L"-K") == 0){ // keep extension name
             g_keepExtension[recursion_id] = true;
+            commandStrings.Delete(i);
+            i--;
+        }    
+        if (commandStrings[i].CompareNoCase(L"-rs") == 0){ // keep extension name
+	    g_searchFilesRecursive[recursion_id] = true;
             commandStrings.Delete(i);
             i--;
         }    
@@ -1962,7 +1972,8 @@ int t7z_main(UStringVector commandStrings, char *buffer)
 		CSysString tmp2;
         UString*archive,*pd,*sd;
         t7z_commandStrings.Add(L"a");
-        t7z_commandStrings.Add(L"-r");  //recursive
+    	if (g_searchFilesRecursive[recursion_id])
+        	t7z_commandStrings.Add(L"-r");  //recursive
         t7z_commandStrings.Add(L"-t7z");  //format 7z
         t7z_commandStrings.Add(L"-mx=9");  //compression max
         t7z_commandStrings.Add(L"");

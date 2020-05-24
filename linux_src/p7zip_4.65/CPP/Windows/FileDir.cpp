@@ -872,7 +872,7 @@ bool CreateTempDirectory(LPCTSTR prefix, CSysString &dirName)
 	//printf("erro Dir1\n");
       return false;
     }
-    printf(UnicodeStringToMultiByte(dirName,CP_ACP) );
+    //printf(UnicodeStringToMultiByte(dirName,CP_ACP) );
     if (!tempFile.Remove()){
 	  //printf("Error Dir2\n");
       return false;

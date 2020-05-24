@@ -25,6 +25,7 @@ text("  x: eXtract files with full paths\n") \
 text("\n") \
 text("<Switches>\n") \
 text("  -K: Keep the original extension when creating archive name\n") \
+text("  -rs: Enable recursive search for the input files (disabled by default)\n") \
 text("  -ba: Disable copyright info\n") \
 text("  -bd: Disable percentage indicator\n") \
 text("  -o{Directory}: set Output directory\n") \

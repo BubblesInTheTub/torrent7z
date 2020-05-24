@@ -1,4 +1,4 @@
-#include "../cpp/Common/MyString.h"
+#include "../CPP/Common/MyString.h"
 
 namespace torrent7z
 {

@@ -130,6 +130,7 @@ bool g_nocopyright[MAX_RECURSIONS];
 bool g_createnonsolid[MAX_RECURSIONS];
 bool g_createnonsolid_r[MAX_RECURSIONS];
 bool g_keepExtension[MAX_RECURSIONS];
+bool g_searchFilesRecursive[MAX_RECURSIONS];
 //Shifting to local space
 //CSysString addcmds(text(""));
 
@@ -225,6 +226,7 @@ void initialize_global_switches(){
         g_nplus[i]=false;    
         g_nocopyright[i]=false;
         g_keepExtension[i] = false;
+	g_searchFilesRecursive[i] = false;
     }
 }
 
@@ -660,6 +662,8 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
             }
         }
     }
+    if (g_searchFilesRecursive[recursion_id] == false)
+	return EAX;
     NWindows::NFile::NFind::CEnumerator match_dir(combine_path(path,text("*")));
     while(match_dir.Next(fileInfo))
     {
@@ -1489,7 +1493,8 @@ void print_copyright()
         setenv(t7zsig_str,text("1"),1);
         if(!g_nocopyright[recursion_id])
         {
-            logprint(text("\n")+CSysString(t7zsig_str)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
+            //logprint(text("\n")+CSysString(t7zsig_str)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
+            logprint((L"\ntorrent7z v1.1 (May 24th, 2020)/\n"),~2);
             logprint(text("using ")+CSysString(k7zCopyrightString)+text("\n\n"),~2);
         }
         g_firstInstance[recursion_id]=1;
@@ -1512,6 +1517,11 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         }
         if (commandStrings[i].CompareNoCase(L"-K") == 0){ // keep extension name
             g_keepExtension[recursion_id] = true;
+            commandStrings.Delete(i);
+            i--;
+        }    
+        if (commandStrings[i].CompareNoCase(L"-rs") == 0){ // keep extension name
+	    g_searchFilesRecursive[recursion_id] = true;
             commandStrings.Delete(i);
             i--;
         }    
@@ -1934,7 +1944,8 @@ int t7z_main(UStringVector commandStrings, char *buffer)
 		CSysString tmp2;
         UString*archive,*pd,*sd;
         t7z_commandStrings.Add(L"a");
-        t7z_commandStrings.Add(L"-r");  //recursive
+    	if (g_searchFilesRecursive[recursion_id])
+        	t7z_commandStrings.Add(L"-r");  //recursive
         t7z_commandStrings.Add(L"-t7z");  //format 7z
         t7z_commandStrings.Add(L"-mx=9");  //compression max
         t7z_commandStrings.Add(L"");
