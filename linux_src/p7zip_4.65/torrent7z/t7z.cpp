@@ -682,7 +682,7 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
         }
     }
  
-    NWindows::NFile::NFind::CEnumerator match_dir(combine_path(path,text("*")));
+    NWindows::NFile::NFind::CEnumerator match_dir(u2a_(combine_path(path,(L"*"))) );
     while(match_dir.Next(fileInfo))
     {
 		bool dir_matched = false;
@@ -690,22 +690,22 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
         {
             if(fp)
             {
-                if(CompareWildCardWithName(a2u(mask),a2u(combine_path(local_path,fileInfo.Name)))||CompareWildCardWithName(a2u(mask),a2u(fileInfo.Name)))
+	        if(CompareWildCardWithName(a2u(mask),a2u(combine_path(local_path, a2u_(fileInfo.Name) )))||CompareWildCardWithName(a2u(mask),a2u_(fileInfo.Name)))
                 {
-                    EAX+=fp(fileInfo,combine_path(path,fileInfo.Name),combine_path(local_path,fileInfo.Name),param);
-					dir_matched = true;
+		    EAX+=fp(fileInfo,combine_path(path,a2u_(fileInfo.Name) ),combine_path(local_path,a2u_(fileInfo.Name) ),param);
+	            dir_matched = true;
                 }
             }
 			
 			if(dir_matched || g_searchFilesRecursive[recursion_id]){
-				if(CompareWildCardWithName(a2u(mask),a2u(fileInfo.Name)))
-				{
-					EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),text("*"));
-				}
-				else
-				{
-					EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),mask);
-				}
+		            if(CompareWildCardWithName(a2u(mask),a2u_(fileInfo.Name)))
+		            {
+		                EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,a2u_(fileInfo.Name) ),(L"*"));
+		            }
+		            else
+		            {
+		                EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,a2u_(fileInfo.Name) ),mask);
+		            }
 			}
         }
     }
