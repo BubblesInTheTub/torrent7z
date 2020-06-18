@@ -1,3 +1,6 @@
+torrent7z v1.2 (6/18/2020)
+==========================
+-Bug fix: disabling recursive file add causes directory targets to not get added. Fixed.
 
 torrent7z v1.1 (5/22/2020)
 ==========================

@@ -662,11 +662,11 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
             }
         }
     }
-    if (g_searchFilesRecursive[recursion_id] == false)
-	return EAX;
+
     NWindows::NFile::NFind::CEnumerator match_dir(combine_path(path,text("*")));
     while(match_dir.Next(fileInfo))
     {
+		bool dir_matched = false;
         if(fileInfo.IsDir())
         {
             if(fp)
@@ -674,16 +674,20 @@ int process_mask(const CSysString&base_path,file_proc fp,void*param=0,int split=
                 if(CompareWildCardWithName(a2u(mask),a2u(combine_path(local_path,fileInfo.Name)))||CompareWildCardWithName(a2u(mask),a2u(fileInfo.Name)))
                 {
                     EAX+=fp(fileInfo,combine_path(path,fileInfo.Name),combine_path(local_path,fileInfo.Name),param);
+					dir_matched = true;
                 }
             }
-            if(CompareWildCardWithName(a2u(mask),a2u(fileInfo.Name)))
-            {
-                EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),text("*"));
-            }
-            else
-            {
-                EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),mask);
-            }
+			
+			if(dir_matched || g_searchFilesRecursive[recursion_id]){
+				if(CompareWildCardWithName(a2u(mask),a2u(fileInfo.Name)))
+				{
+					EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),text("*"));
+				}
+				else
+				{
+					EAX+=process_mask(base_path,fp,param,split,combine_path(local_path,fileInfo.Name),mask);
+				}
+			}
         }
     }
     return EAX;
@@ -1482,7 +1486,7 @@ void print_copyright()
         if(!g_nocopyright[recursion_id])
         {
             //logprint(text("\n")+MultiByteToUnicodeString(t7zsig_str,CP_ACP)+text("/")+text(__TIMESTAMP__)+text("\n"),~2);
-			logprint((L"\ntorrent7z v1.1 (May 24th, 2020)/\n"),~2);
+			logprint((L"\ntorrent7z v1.2 (June 18th, 2020)/\n"),~2);
             logprint(text("using ")+MultiByteToUnicodeString(k7zCopyrightString,CP_ACP)+text("\n\n"),~2);
         }
         g_firstInstance[recursion_id]=1;
