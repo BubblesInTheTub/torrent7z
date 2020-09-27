@@ -1181,7 +1181,7 @@ bool recompress(const CSysString&fname, CSysString addcmds, char* buffer_inp,boo
         //UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o"+ tmpdir.GetPath()+ L"-y "
        // UString cmd2 = L"D:\\repos\\torrent7z\\torrent7z\\windows_src\\src\\torrent7z\\o\\t7z.exe x -o\""+ tmpdir.GetPath()+ L"\" -y "
         UString cmd2 = L"placeholder x -o\""+ tmpdir.GetPath()+ L"\" -y "
-                      + addcmds + L" -- " + fname;
+                      + addcmds + L" -- \"" + fname + "\"";
 
         logprint(L"reompress 1");
         logprint(cmd2);
