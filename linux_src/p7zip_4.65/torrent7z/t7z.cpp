@@ -268,6 +268,23 @@ short stripExtension(UString &filename, short int max_extension_chars=4){
     return 2;
 }
 
+//Used to strip out the rightmost '/'. Returns 0 if it's full of slashes (weird)
+//returns a 1 if it finds a reasonable number of slashes 
+//returns a 2 if it doesn't find any
+short stripEndingSlash (UString &filename){
+    short int i, char_count, length = filename.Length();
+    for ( i = length - 1; i > 0; i--){
+        if (filename[i] != '\\' && filename[i] != '/')
+            break;
+    }
+    if (i == 0)
+        return 0;
+    char_count = length -i - 1;
+    if (char_count > 0)
+        filename.Delete(i+1, char_count + 1);
+        return 1;
+    return 2;
+}
 /*  #########################################################################  */
 
 const char*get_t7zsig()
@@ -2029,9 +2046,21 @@ int t7z_main(UStringVector commandStrings, char *buffer)
         fi.debugprint=1;
         bool fnotfound=0;
         int fe=0;
+
+        tmp2 = commandStrings[1];
+        stripEndingSlash(tmp2);
+        tmp_length = tmp2.Length(); 
+        if (tmp2[tmp_length -1 ] !='z' && tmp2[tmp_length -2] !='7'){
+            stripExtension(tmp2);
+            tmp2+=L".7z";
+            commandStrings.Insert(1,tmp2); //Then add an archive name here based on the 1st file/directory name
+        }
+    
+
         for(int i=1;i<commandStrings.Size();i++)
         {
 			//tmp2 = commandStrings[i];
+            stripEndingSlash(commandStrings[i]);
             if(fe==0)
             {
                 if(replace_archive)
