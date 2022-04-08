@@ -1,12 +1,12 @@
 
 RM=rm -f
-CFLAGS=-c \
+CFLAGS+=-c \
 -I../../../../C \
 -I../../../myWindows \
 -I../../../include_windows \
 -I../../..
 
-CXXFLAGS=-c \
+CXXFLAGS+=-c \
 -I../../../myWindows \
 -I../../../ \
 -I../../../include_windows
