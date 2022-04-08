@@ -142,7 +142,7 @@ HRESULT CBenchCallback::SetDecodeResult(const CBenchInfo &info, bool final)
   if (final)
   {
     UInt64 rating = GetDecompressRating(info.GlobalTime, info.GlobalFreq, info.UnpackSize, info.PackSize, info.NumIterations);
-    fprintf(f, kSep);
+    fprintf(f, "%s", kSep);
     CBenchInfo info2 = info;
     info2.UnpackSize *= info2.NumIterations;
     info2.PackSize *= info2.NumIterations;
@@ -201,14 +201,14 @@ HRESULT LzmaBenchCon(
   {
     fprintf(f, "   Speed Usage    R/U Rating");
     if (j == 0)
-      fprintf(f, kSep);
+      fprintf(f, "%s", kSep);
   }
   fprintf(f, "\n   ");
   for (j = 0; j < 2; j++)
   {
     fprintf(f, "    KB/s     %%   MIPS   MIPS");
     if (j == 0)
-      fprintf(f, kSep);
+      fprintf(f, "%s", kSep);
   }
   fprintf(f, "\n\n");
   for (UInt32 i = 0; i < numIterations; i++)
